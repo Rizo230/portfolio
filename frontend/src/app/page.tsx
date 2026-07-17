@@ -4,7 +4,7 @@ type HealthResponse = {
 
 async function getBackendStatus(): Promise<HealthResponse | null> {
   try {
-    const response = await fetch("http://localhost:8080/api/health", {
+    const response = await fetch("http://localhost:8090/api/health", {
       cache: "no-store",
     });
 
@@ -13,7 +13,8 @@ async function getBackendStatus(): Promise<HealthResponse | null> {
     }
 
     return response.json();
-  } catch {
+  } catch (error) {
+    console.error("Backend health check failed:", error);
     return null;
   }
 }
@@ -27,6 +28,7 @@ export default async function Home() {
         <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
           Leo Barnes
         </h1>
+
         <p className="mt-6 max-w-2xl text-lg leading-8 text-foreground/70">
           Software, AI, robotics, and infrastructure projects.
         </p>

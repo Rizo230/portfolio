@@ -19,9 +19,9 @@ func main() {
 		}
 	})
 
-	log.Println("Portfolio API running on http://localhost:8080")
+	log.Println("Portfolio API running on http://localhost:8090")
 
-	if err := http.ListenAndServe(":8080", mux); err != nil {
+	if err := http.ListenAndServe(":8090", mux); err != nil {
 		log.Fatal(err)
 	}
 }
