@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio frontend
 
-## Getting Started
+The Next.js frontend for the portfolio. For full project setup, including the
+Go backend, see the [root README](../README.md).
 
-First, run the development server:
+## Requirements
+
+- Node.js 20.9 or newer
+- npm
+
+## Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). The home page requests the
+health status from the Go API at `http://localhost:8080/api/health`; run the
+backend alongside the frontend to see a connected status.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Application routes live under `src/app`, and shared UI components live under
+`src/components`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+```bash
+npm run dev     # Start the development server
+npm run lint    # Run ESLint
+npm run build   # Create a production build
+npm run start   # Serve a completed production build
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Routes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `/`
+- `/about`
+- `/projects`
+- `/contact`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Publishing note
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Replace `hello@example.com` in `src/app/contact/page.tsx` with the correct email
+address before deployment.
