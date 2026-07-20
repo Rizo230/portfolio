@@ -8,13 +8,82 @@ export const metadata: Metadata = {
 
 const projects = [
   {
-    title: "Macadamia Challenge",
+    title: "Autonomous Macadamia Orchard Robot",
     category: "Robotics",
     description:
-      "An autonomous robotics system built to navigate, identify, and interact with objects in a competition environment.",
+      "A ROS 2 autonomy system for detecting orchard trees, generating approach waypoints, and running spiral coverage behaviour.",
     details:
-      "The Macadamia Challenge brought together perception, planning, and control in one autonomous robot. Our team designed a modular ROS architecture, integrated sensor data, and iterated on navigation behaviours through simulation and physical testing. This sample description can be replaced with details about the challenge, my contribution, and the final results.",
-    skills: ["Python", "ROS", "Systems Architecture Design"],
+      "This project was one of my favorite (and most difficult) projects I undertook in my time at RMIT. It turns out, creating an autonomous robot is much harder than you might think! or at least harder than I expected it to be, and I thought it was going to be pretty hard. Creating these systems involves many complex subsystems, from computer vision, localization, path planning, decision making, control and more, all coming together seamlessly, consistently, and in real time for a reliable result.\n\nIn the words of my professor Dr Timothy Wiley, 'The real world sucks!'. When you stack all these complex systems on top of eachother and try to get them running in real life, things inevitably break (sometimes not even the things made by students). This complexity and difficulty is probably why it was also one of my favorite projects, there where so many topics to explore and learn about, and it really pushed me as a developer.",
+    skills: ["Python", "ROS 2", "Nav2", "OpenCV", "OMPL"],
+    caseStudy: {
+      summary:
+        "I worked on a modular ROS 2 autonomy system built around a three-tier architecture. The deliberative layer was handled by an orchard control state machine, which controlled the high-level mission flow: detect the orchard, choose the next tree, request navigation, trigger tree coverage, mark trees as visited, and return home once the mission was complete. The sequencing layer was split into focused ROS nodes for boundary filtering, tree mapping, tree memory, waypoint planning, OMPL path planning, Nav2 path dispatch, and spiral coverage behaviour. Each node communicated through explicit topics and actions, which made the system easier to test in isolation and easier to integrate into a complete multi-tree mission. The reactive layer relied on slam_toolbox and Nav2 for localisation, occupancy-grid updates, obstacle-aware movement, and low-level actuation. On top of that stack, the system used occupancy-grid tree detection, configurable orchard boundaries, smoothed tree estimates, nearest-unvisited-tree selection, approach waypoint generation, Nav2 action clients, and circular or square spiral behaviours to service detected macadamia trees.",
+      metrics: [
+        {
+          value: "7",
+          label: "Mission nodes",
+          detail:
+            "Controller, detection, filtering, memory, planning, navigation, and behaviour",
+        },
+        {
+          value: "0.180s",
+          label: "RRTConnect planning",
+          detail:
+            "Approximate average path calculation time over five report runs",
+        },
+        {
+          value: "1.047s",
+          label: "RRT* planning",
+          detail:
+            "Approximate average calculation time for a shorter reported path",
+        },
+        {
+          value: "4",
+          label: "Coverage modes",
+          detail:
+            "Circular and square spirals with direct steering and Nav2 waypoint variants",
+        },
+      ],
+      pipelineTitle: "Autonomy pipeline",
+      pipeline: [
+        "Filter orchard map",
+        "Detect tree contours",
+        "Smooth tree memory",
+        "Plan next waypoint",
+        "Navigate with Nav2",
+        "Run spiral coverage",
+        "Mark tree visited",
+        "Return home",
+      ],
+      samples: [],
+      chartsTitle: "Project visuals",
+      charts: [
+        {
+          title: "Three-tier ROS 2 software architecture",
+          image: "/projects/macadamia/software-architecture.png",
+          width: 1160,
+          height: 550,
+          featured: true,
+        },
+        {
+          title: "Mission flow and state sequencing",
+          image: "/projects/macadamia/mission-flow.png",
+          width: 1062,
+          height: 502,
+          featured: true,
+        },
+        {
+          title: "Nav2 spiral coverage path planning",
+          image: "/projects/macadamia/spiral-nav2-path.png",
+          width: 2058,
+          height: 1776,
+          featured: true,
+        },
+      ],
+      reflectionTitle: "Engineering tradeoffs",
+      reflection:
+        "The strongest parts of the project were the deterministic mission sequencing and the clear ROS topic boundaries between nodes. The main limitations were drift during round spiral behaviour, limited recovery when a state failed, and unreliable Nav2 execution for local spiral waypoint batches. The next improvements would be explicit retry policies, mission-history logging, and a cleaner split between tree-centre poses and approach-waypoint poses.",
+    },
   },
   {
     title: "AI-Powered Cell Identification",

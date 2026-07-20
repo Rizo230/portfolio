@@ -12,9 +12,20 @@ export type Project = {
   caseStudy?: {
     summary: string;
     metrics: { value: string; label: string; detail: string }[];
+    pipelineTitle?: string;
     pipeline: string[];
+    samplesTitle?: string;
+    samplesDescription?: string;
     samples: { label: string; image: string }[];
-    charts: { title: string; image: string }[];
+    chartsTitle?: string;
+    charts: {
+      title: string;
+      image: string;
+      width?: number;
+      height?: number;
+      featured?: boolean;
+    }[];
+    reflectionTitle?: string;
     reflection: string;
   };
 };
@@ -111,7 +122,7 @@ export default function ProjectGrid({ projects }: { projects: Project[] }) {
             >
               <div className="min-h-0 overflow-hidden">
                 <div className="border-t border-black/10 p-6 dark:border-white/10 sm:p-8">
-                  <p className="max-w-3xl leading-8 text-foreground/75">
+                  <p className="max-w-3xl whitespace-pre-line leading-8 text-foreground/75">
                     {project.details}
                   </p>
 
@@ -142,7 +153,9 @@ export default function ProjectGrid({ projects }: { projects: Project[] }) {
                       </dl>
 
                       <div>
-                        <h3 className="text-lg font-semibold">Model pipeline</h3>
+                        <h3 className="text-lg font-semibold">
+                          {project.caseStudy.pipelineTitle ?? "Model pipeline"}
+                        </h3>
                         <ol className="mt-4 grid gap-3 sm:grid-cols-4">
                           {project.caseStudy.pipeline.map((step, index) => (
                             <li
@@ -158,62 +171,77 @@ export default function ProjectGrid({ projects }: { projects: Project[] }) {
                         </ol>
                       </div>
 
-                      <div>
-                        <h3 className="text-lg font-semibold">
-                          Labelled dataset samples
-                        </h3>
-                        <p className="mt-2 text-sm text-foreground/60">
-                          Representative 27×27 microscopy images used by the
-                          classifier.
-                        </p>
-                        <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                          {project.caseStudy.samples.map((sample) => (
-                            <figure
-                              key={sample.label}
-                              className="overflow-hidden rounded-xl border border-black/10 bg-foreground/[0.02] dark:border-white/10"
-                            >
-                              <Image
-                                src={sample.image}
-                                alt={`${sample.label} cell microscopy sample`}
-                                width={270}
-                                height={270}
-                                sizes="(min-width: 640px) 20vw, 40vw"
-                                className="aspect-square w-full"
-                              />
-                              <figcaption className="border-t border-black/10 px-4 py-3 text-sm font-semibold dark:border-white/10">
-                                {sample.label}
-                              </figcaption>
-                            </figure>
-                          ))}
+                      {project.caseStudy.samples.length > 0 && (
+                        <div>
+                          <h3 className="text-lg font-semibold">
+                            {project.caseStudy.samplesTitle ??
+                              "Labelled dataset samples"}
+                          </h3>
+                          <p className="mt-2 text-sm text-foreground/60">
+                            {project.caseStudy.samplesDescription ??
+                              "Representative 27×27 microscopy images used by the classifier."}
+                          </p>
+                          <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                            {project.caseStudy.samples.map((sample) => (
+                              <figure
+                                key={sample.label}
+                                className="overflow-hidden rounded-xl border border-black/10 bg-foreground/[0.02] dark:border-white/10"
+                              >
+                                <Image
+                                  src={sample.image}
+                                  alt={sample.label}
+                                  width={270}
+                                  height={270}
+                                  sizes="(min-width: 640px) 20vw, 40vw"
+                                  className="aspect-square w-full"
+                                />
+                                <figcaption className="border-t border-black/10 px-4 py-3 text-sm font-semibold dark:border-white/10">
+                                  {sample.label}
+                                </figcaption>
+                              </figure>
+                            ))}
+                          </div>
                         </div>
-                      </div>
+                      )}
 
-                      <div>
-                        <h3 className="text-lg font-semibold">Training results</h3>
-                        <div className="mt-4 grid gap-4 lg:grid-cols-2">
-                          {project.caseStudy.charts.map((chart) => (
-                            <figure
-                              key={chart.title}
-                              className="overflow-hidden rounded-xl border border-black/10 dark:border-white/10"
-                            >
-                              <Image
-                                src={chart.image}
-                                alt={`${chart.title} loss and accuracy curves`}
-                                width={861}
-                                height={448}
-                                sizes="(min-width: 1024px) 45vw, 90vw"
-                                className="w-full bg-white"
-                              />
-                              <figcaption className="border-t border-black/10 px-4 py-3 text-sm font-medium dark:border-white/10">
-                                {chart.title}
-                              </figcaption>
-                            </figure>
-                          ))}
+                      {project.caseStudy.charts.length > 0 && (
+                        <div>
+                          <h3 className="text-lg font-semibold">
+                            {project.caseStudy.chartsTitle ?? "Training results"}
+                          </h3>
+                          <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                            {project.caseStudy.charts.map((chart) => (
+                              <figure
+                                key={chart.title}
+                                className={`overflow-hidden rounded-xl border border-black/10 dark:border-white/10 ${
+                                  chart.featured ? "lg:col-span-2" : ""
+                                }`}
+                              >
+                                <Image
+                                  src={chart.image}
+                                  alt={chart.title}
+                                  width={chart.width ?? 861}
+                                  height={chart.height ?? 448}
+                                  sizes={
+                                    chart.featured
+                                      ? "90vw"
+                                      : "(min-width: 1024px) 45vw, 90vw"
+                                  }
+                                  className="h-auto w-full bg-white"
+                                />
+                                <figcaption className="border-t border-black/10 px-4 py-3 text-sm font-medium dark:border-white/10">
+                                  {chart.title}
+                                </figcaption>
+                              </figure>
+                            ))}
+                          </div>
                         </div>
-                      </div>
+                      )}
 
                       <div className="rounded-xl border-l-4 border-accent bg-foreground/[0.03] p-5">
-                        <h3 className="font-semibold">What I learned</h3>
+                        <h3 className="font-semibold">
+                          {project.caseStudy.reflectionTitle ?? "What I learned"}
+                        </h3>
                         <p className="mt-2 max-w-3xl leading-7 text-foreground/75">
                           {project.caseStudy.reflection}
                         </p>
