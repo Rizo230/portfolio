@@ -27,7 +27,7 @@ In addition to presenting completed projects, the website will provide interacti
 | Frontend             | Next.js 16 (React 19 + TypeScript) |
 | Backend              | Go 1.26                            |
 | Styling              | Tailwind CSS 4                     |
-| API                  | REST health endpoint               |
+| API                  | REST health and contact endpoints  |
 | Development Workflow | Git with local development servers |
 | Deployment           | Docker & Homelab _(planned)_       |
 
@@ -60,7 +60,16 @@ cd backend
 go run .
 ```
 
-The API runs at `http://localhost:8080` and exposes `GET /api/health`.
+The API runs at `http://localhost:8090` and exposes `GET /api/health` and
+`POST /api/contact`.
+
+For the contact form, copy `backend/.env.example` to `backend/.env` and set
+`RESEND_API_KEY` and `TURNSTILE_SECRET_KEY`. `RESEND_FROM_EMAIL` should use a
+verified Resend sender for production.
+
+Copy `frontend/.env.example` to `frontend/.env.local` and set
+`NEXT_PUBLIC_TURNSTILE_SITE_KEY`. The frontend API base URL should point to the
+same origin that proxies `/api` to the Go backend in production.
 
 In a second terminal, start the frontend:
 
@@ -70,21 +79,22 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The frontend still loads
+Open [http://localhost:3001](http://localhost:3001). The frontend still loads
 when the API is offline and displays the backend status as unavailable.
 
 ---
 
 ## Current Features
 
-| Feature           | Purpose                     | Status      |
-| ----------------- | --------------------------- | ----------- |
-| Next.js frontend  | Portfolio user interface    | In Progress |
-| Go backend        | REST API                    | In Progress |
-| Project showcase  | Display example projects    | In Progress |
-| Contact page      | Display contact information | In Progress |
-| Responsive design | Desktop & mobile support    | In Progress |
-| Interactive demos | Live project demonstrations | Planned     |
+| Feature           | Purpose                      | Status      |
+| ----------------- | ---------------------------- | ----------- |
+| Next.js frontend  | Portfolio user interface     | In Progress |
+| Go backend        | REST API                     | In Progress |
+| Project showcase  | Display example projects     | In Progress |
+| Contact page      | Display contact information  | In Progress |
+| Contact form      | Send messages through Resend | In Progress |
+| Responsive design | Desktop & mobile support     | In Progress |
+| Interactive demos | Live project demonstrations  | Planned     |
 
 ---
 
@@ -109,9 +119,9 @@ when the API is offline and displays the backend status as unavailable.
 - [x] About page
 - [x] Projects page
 - [x] Contact page
-- [ ] Individual project pages
+- [x] Individual project pages
 - [ ] Resume
-- [ ] Contact form
+- [x] Contact form
 
 ### Interactive Projects
 

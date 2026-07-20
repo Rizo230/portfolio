@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ContactForm from "@/components/ContactForm";
 import ContactMethods from "@/components/ContactMethods";
 
 export const metadata: Metadata = {
@@ -21,10 +22,17 @@ export default function ContactPage() {
         call, or just send your questions my way.
       </p>
 
-      <section className="mt-12 max-w-2xl rounded-2xl border border-black/10 p-8 dark:border-white/10">
-        <h2 className="text-xl font-semibold">Find me at</h2>
-        <ContactMethods />
-      </section>
+      <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(280px,0.9fr)]">
+        <section>
+          <h2 className="mb-5 text-xl font-semibold">Send a message</h2>
+          <ContactForm />
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold">Find me at</h2>
+          <ContactMethods />
+        </section>
+      </div>
     </main>
   );
 }

@@ -12,9 +12,9 @@ const contactMethods = [
   },
   {
     label: "Email",
-    value: "leobenjaminbarnes@gmail.com",
-    copyValue: "leobenjaminbarnes@gmail.com",
-    href: "mailto:leobenjaminbarnes@gmail.com",
+    value: "leo@leobarnes.dev",
+    copyValue: "leo@leobarnes.dev",
+    href: "mailto:leo@leobarnes.dev",
     preferred: false,
   },
   {

@@ -1,2 +1,5 @@
 frontend/AGENTS.md
 frontend/CLAUDE.md
+.env
+.env.local
+.env.production
