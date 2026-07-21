@@ -93,6 +93,11 @@ const projects = [
     details:
       "This project was my introduction to computer vision and deep learning, through hands on experimentation with CNNs. This served as a fantastic foundation for my future work in AI, helping me learn the pipeline of data collection, data preparation, model training, and evaluation.",
     skills: ["Python", "TensorFlow / Keras", "CNN Development"],
+    download: {
+      label: "Download project notebook",
+      href: "/projects/cell-identification/Cell_Classifier.ipynb",
+      filename: "Cell_Classifier.ipynb",
+    },
     caseStudy: {
       summary:
         "I built and evaluated convolutional neural networks for two supervised-learning tasks: identifying whether an isolated cell was cancerous and classifying it as one of four cell types. The models were trained on 9,896 labelled 27×27 microscopy images using augmentation, class weighting, and early stopping.",
@@ -168,20 +173,28 @@ const projects = [
 
 export default function ProjectsPage() {
   return (
-    <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-20">
-      <p className="text-sm font-semibold uppercase tracking-widest text-accent">
-        Projects
-      </p>
-      <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-6xl">
-        Selected uni work and home experiments.
-      </h1>
-      <p className="mt-6 max-w-2xl text-lg leading-8 text-foreground/70">
-        A few of my favourite and best software projects across uni and my
-        experiments at home, showing off everything from autonomous robots and
-        computer vision, to mixed reality game design and homelabbing.
-      </p>
+    <main className="portfolio-projects flex-1">
+      <div className="portfolio-home-glow" aria-hidden="true" />
 
-      <ProjectGrid projects={projects} />
+      <section
+        className="portfolio-projects-shell"
+        aria-labelledby="projects-heading"
+      >
+        <div className="portfolio-projects-hero">
+          <p className="portfolio-kicker">Projects</p>
+          <h1 id="projects-heading" className="portfolio-projects-display">
+            <span>My favorite </span>
+            <span className="portfolio-display-muted">projects</span>
+          </h1>
+          <p className="portfolio-lede">
+            A few of my favourite and best software projects across uni and my
+            experiments at home, showing off everything from autonomous robots
+            and computer vision, to mixed reality game design and homelabbing.
+          </p>
+        </div>
+
+        <ProjectGrid projects={projects} />
+      </section>
     </main>
   );
 }
