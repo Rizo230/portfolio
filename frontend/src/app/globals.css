@@ -42,6 +42,65 @@ body {
   overflow-x: hidden;
 }
 
+.portfolio-page-transition {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+@keyframes portfolio-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes portfolio-card-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes portfolio-profile-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-hero-content,
+  .portfolio-status,
+  .portfolio-about-content,
+  .portfolio-projects-shell,
+  .portfolio-contact-shell,
+  .portfolio-profile-card.is-route-entering,
+  .portfolio-about-card.is-route-entering,
+  .portfolio-profile-copy,
+  .portfolio-social-list,
+  .portfolio-about-card-copy,
+  .portfolio-about-card-stats {
+    animation: none !important;
+  }
+}
+
 .portfolio-nav {
   pointer-events: auto;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -166,9 +225,11 @@ body {
 }
 
 .portfolio-profile-card {
-  position: sticky;
-  top: 84px;
+  position: fixed;
+  top: 145px;
+  left: max(24px, calc((100vw - 1140px) / 2));
   display: flex;
+  width: min(360px, calc(100vw - 48px));
   flex-direction: column;
   min-width: 0;
   min-height: 0;
@@ -178,6 +239,12 @@ body {
   color: #0b0b0b;
   padding: 28px 28px 76px;
   box-shadow: 0 25px 75px rgba(0, 0, 0, 0.36);
+}
+
+.portfolio-profile-card.is-route-entering,
+.portfolio-about-card.is-route-entering {
+  transform-origin: top left;
+  animation: portfolio-profile-card-enter 340ms ease both;
 }
 
 .portfolio-profile-art {
@@ -231,6 +298,7 @@ body {
   font-size: 1.08rem;
   font-weight: 800;
   line-height: 1.15;
+  animation: portfolio-card-content-enter 260ms ease both;
 }
 
 .portfolio-social-list {
@@ -243,6 +311,7 @@ body {
   gap: 28px;
   margin-top: 0;
   padding-top: 0;
+  animation: portfolio-card-content-enter 280ms ease 70ms both;
 }
 
 .portfolio-social-link {
@@ -267,9 +336,11 @@ body {
 }
 
 .portfolio-hero-content {
+  grid-column: 2;
   min-width: 0;
   max-width: 100%;
   padding-top: 18px;
+  animation: portfolio-page-enter 320ms ease both;
 }
 
 .portfolio-kicker {
@@ -510,6 +581,7 @@ body {
   padding-top: 24px;
   color: var(--muted);
   font-size: 1.08rem;
+  animation: portfolio-page-enter 320ms ease both;
 }
 
 .portfolio-status strong {
@@ -543,6 +615,7 @@ body {
   width: min(100%, 1240px);
   max-width: 100%;
   margin: 0 auto;
+  animation: portfolio-page-enter 320ms ease both;
 }
 
 .portfolio-projects-hero {
@@ -628,10 +701,16 @@ body {
   color: #101504;
 }
 
+.portfolio-projects-card-5 {
+  background: #2f6f8f;
+  color: #f4fbff;
+}
+
 .portfolio-projects-card-1.is-expanded,
 .portfolio-projects-card-2.is-expanded,
 .portfolio-projects-card-3.is-expanded,
-.portfolio-projects-card-4.is-expanded {
+.portfolio-projects-card-4.is-expanded,
+.portfolio-projects-card-5.is-expanded {
   color: var(--foreground);
 }
 
@@ -649,6 +728,10 @@ body {
 
 .portfolio-projects-card-4.is-expanded {
   border-color: color-mix(in srgb, var(--green) 78%, #ffffff 10%);
+}
+
+.portfolio-projects-card-5.is-expanded {
+  border-color: color-mix(in srgb, #2f6f8f 78%, #ffffff 12%);
 }
 
 .portfolio-projects-card-1.is-expanded .portfolio-projects-toggle {
@@ -669,6 +752,11 @@ body {
 .portfolio-projects-card-4.is-expanded .portfolio-projects-toggle {
   background: var(--green);
   color: #101504;
+}
+
+.portfolio-projects-card-5.is-expanded .portfolio-projects-toggle {
+  background: #2f6f8f;
+  color: #f4fbff;
 }
 
 .portfolio-projects-toggle {
@@ -768,6 +856,10 @@ body {
 
 .portfolio-projects-card-4.is-expanded .portfolio-projects-skills {
   border-top-color: color-mix(in srgb, var(--green) 44%, transparent);
+}
+
+.portfolio-projects-card-5.is-expanded .portfolio-projects-skills {
+  border-top-color: color-mix(in srgb, #2f6f8f 44%, transparent);
 }
 
 .portfolio-projects-skills li {
@@ -1014,6 +1106,194 @@ body {
   padding: 22px 24px;
 }
 
+.portfolio-about {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: clip;
+  padding: 145px 24px 72px;
+  background:
+    radial-gradient(
+      circle at 12% 18%,
+      rgba(255, 106, 0, 0.12),
+      transparent 18rem
+    ),
+    radial-gradient(
+      circle at 84% 30%,
+      rgba(145, 183, 43, 0.14),
+      transparent 20rem
+    ),
+    var(--background);
+}
+
+.portfolio-about-shell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: min(100%, 1140px);
+  margin: 0 auto;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: clamp(40px, 7vw, 82px);
+  align-items: start;
+}
+
+.portfolio-about-card {
+  position: fixed;
+  top: 145px;
+  left: max(24px, calc((100vw - 1140px) / 2));
+  width: min(360px, calc(100vw - 48px));
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 28px;
+  background: var(--surface);
+  color: #0b0b0b;
+  padding: 28px;
+  box-shadow: 0 25px 75px rgba(0, 0, 0, 0.36);
+}
+
+.portfolio-about-art {
+  height: 240px;
+}
+
+.portfolio-about-name {
+  margin: 24px 0 0;
+  color: #0b0b0b;
+  font-size: 2.25rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.portfolio-about-card-copy {
+  max-width: 285px;
+  margin: 18px 0 0;
+  color: #5f5b56;
+  font-size: 1.08rem;
+  font-weight: 850;
+  line-height: 1.15;
+  animation: portfolio-card-content-enter 260ms ease both;
+}
+
+.portfolio-about-card-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 34px 0 0;
+  animation: portfolio-card-content-enter 280ms ease 70ms both;
+}
+
+.portfolio-about-card-stats div {
+  min-width: 0;
+  min-height: 118px;
+  border-radius: 12px;
+  background: #171614;
+  padding: 22px 20px;
+  color: var(--foreground);
+}
+
+.portfolio-about-card-stats dt {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.portfolio-about-card-stats dd {
+  margin: 18px 0 0;
+  color: var(--foreground);
+  font-size: clamp(1.3rem, 2vw, 1.5rem);
+  font-weight: 950;
+  line-height: 0.98;
+}
+
+.portfolio-about-content {
+  grid-column: 2;
+  min-width: 0;
+  padding-top: 18px;
+  animation: portfolio-page-enter 320ms ease both;
+}
+
+.portfolio-about-hero {
+  max-width: min(850px, 100%);
+}
+
+.portfolio-about-display {
+  max-width: 100%;
+  margin: 0;
+  color: var(--foreground);
+  font-size: clamp(4rem, 7.2vw, 5.8rem);
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 0.88;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+}
+
+.portfolio-about-display span {
+  display: block;
+}
+
+.portfolio-about-lower {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+  gap: 28px;
+  align-items: stretch;
+  margin-top: 56px;
+}
+
+.portfolio-about-statement {
+  min-width: 0;
+  border-left: 5px solid var(--accent);
+  background: rgba(255, 255, 255, 0.035);
+  padding: 28px 28px;
+}
+
+.portfolio-about-statement p {
+  max-width: 465px;
+  margin: 0;
+  color: var(--foreground);
+  font-size: 1.2rem;
+  font-weight: 850;
+  line-height: 1.38;
+}
+
+.portfolio-about-interests {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: about-interest;
+}
+
+.portfolio-about-interests li {
+  display: flex;
+  min-width: 0;
+  min-height: 70px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.035);
+  padding: 0 20px;
+  color: var(--foreground);
+}
+
+.portfolio-about-interests span {
+  min-width: 0;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.portfolio-about-interests strong {
+  flex-shrink: 0;
+  color: var(--accent);
+  font-size: 1.18rem;
+  font-weight: 950;
+  line-height: 1;
+}
+
 .portfolio-contact {
   position: relative;
   min-height: 100vh;
@@ -1038,6 +1318,7 @@ body {
   z-index: 1;
   width: min(100%, 1140px);
   margin: 0 auto;
+  animation: portfolio-page-enter 320ms ease both;
 }
 
 .portfolio-contact-hero {
@@ -1348,12 +1629,18 @@ body {
   .portfolio-profile-card {
     position: relative;
     top: auto;
+    left: auto;
     display: grid;
+    width: 100%;
     min-height: auto;
     grid-template-columns: 150px 1fr;
     gap: 24px;
     align-items: center;
     padding: 28px;
+  }
+
+  .portfolio-hero-content {
+    grid-column: auto;
   }
 
   .portfolio-profile-art {
@@ -1389,6 +1676,55 @@ body {
 
   .portfolio-contact {
     padding-top: 120px;
+  }
+
+  .portfolio-about {
+    padding-top: 120px;
+  }
+
+  .portfolio-about-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-about-card {
+    position: relative;
+    top: auto;
+    left: auto;
+    display: grid;
+    width: 100%;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 24px;
+    align-items: center;
+    padding: 28px;
+  }
+
+  .portfolio-about-art {
+    grid-row: span 3;
+    height: 150px;
+  }
+
+  .portfolio-about-name {
+    margin: 0;
+    font-size: 2rem;
+  }
+
+  .portfolio-about-card-copy {
+    max-width: 520px;
+    margin: 0;
+  }
+
+  .portfolio-about-card-stats {
+    grid-column: 2;
+    max-width: 350px;
+    margin: 0;
+  }
+
+  .portfolio-about-lower {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-about-content {
+    grid-column: auto;
   }
 
   .portfolio-projects {
@@ -1601,6 +1937,80 @@ body {
 
   .portfolio-contact {
     padding-inline: 16px;
+  }
+
+  .portfolio-about {
+    padding-inline: 16px;
+  }
+
+  .portfolio-about-shell {
+    width: 100%;
+    max-width: 100%;
+    gap: 42px;
+  }
+
+  .portfolio-about-card {
+    width: calc(100vw - 32px);
+    max-width: 100%;
+    grid-template-columns: 1fr;
+    justify-self: center;
+    padding: 20px;
+  }
+
+  .portfolio-about-art {
+    grid-row: auto;
+    height: 230px;
+  }
+
+  .portfolio-about-name {
+    margin-top: 24px;
+    text-align: center;
+  }
+
+  .portfolio-about-card-copy {
+    max-width: 285px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+  }
+
+  .portfolio-about-card-stats {
+    grid-column: auto;
+    max-width: none;
+    gap: 12px;
+  }
+
+  .portfolio-about-card-stats div {
+    min-height: 108px;
+    padding: 18px 16px;
+  }
+
+  .portfolio-about-display {
+    font-size: clamp(2.28rem, 11vw, 3.15rem);
+    line-height: 0.94;
+  }
+
+  .portfolio-about .portfolio-lede {
+    width: 100%;
+    max-width: 22rem;
+    font-size: 1rem;
+  }
+
+  .portfolio-about-lower {
+    margin-top: 38px;
+  }
+
+  .portfolio-about-statement {
+    padding: 24px 22px;
+  }
+
+  .portfolio-about-statement p {
+    font-size: 1.04rem;
+  }
+
+  .portfolio-about-interests li {
+    min-height: 64px;
+    padding: 0 16px;
   }
 
   .portfolio-contact-shell {

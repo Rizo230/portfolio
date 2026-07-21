@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import ProfileCardFrame from "@/components/ProfileCardFrame";
 
 type HealthResponse = {
   status: string;
@@ -94,7 +95,7 @@ export default async function Home() {
       <div className="portfolio-home-glow" aria-hidden="true" />
 
       <section className="portfolio-hero" aria-labelledby="home-heading">
-        <aside className="portfolio-profile-card">
+        <ProfileCardFrame className="portfolio-profile-card">
           <div className="portfolio-profile-art">
             <span>LB</span>
           </div>
@@ -127,7 +128,7 @@ export default async function Home() {
               </li>
             ))}
           </ul>
-        </aside>
+        </ProfileCardFrame>
 
         <div className="portfolio-hero-content">
           <h1 id="home-heading" className="portfolio-display">

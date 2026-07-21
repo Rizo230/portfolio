@@ -169,6 +169,56 @@ const projects = [
       "Pokémon: AR TCG was a mixed-reality game design experiment focused on connecting familiar physical cards with animated digital interactions. The prototype investigated card recognition, spatial interfaces, player feedback, and the constraints of evolving AR tooling. This sample description can be replaced with a development retrospective and gameplay footage.",
     skills: ["MR development", "Deprecated Software", "Development Hell"],
   },
+  {
+    title: "Portfolio Website",
+    category: "Full Stack",
+    description:
+      "The full-stack portfolio site you are reading now, built to showcase projects, contact workflows, and future interactive demos.",
+    details:
+      "This portfolio is a full-stack personal site built with a Next.js frontend and a Go REST API. The frontend focuses on a responsive project showcase with animated route transitions, expandable case-study cards, a contact page, and a design system that can grow as new work is added. The backend currently provides health and contact endpoints, with the structure in place for self-hosted deployment and future live project integrations.\n\nI built it as both a portfolio and a practical engineering platform: something polished enough to represent my work, but simple enough to keep extending with demos, infrastructure experiments, and deeper technical writeups.",
+    skills: ["Next.js", "TypeScript", "Go", "Tailwind CSS", "REST APIs"],
+    caseStudy: {
+      summary:
+        "The site is organized as a small full-stack application with a typed Next.js frontend, reusable portfolio components, and a Go backend for API-backed features. The project cards are data-driven, expandable, and support richer case-study content without requiring a separate route for every project.",
+      metrics: [
+        {
+          value: "4",
+          label: "Core routes",
+          detail: "Home, about, projects, and contact",
+        },
+        {
+          value: "2",
+          label: "Runtime layers",
+          detail: "Next.js frontend and Go API",
+        },
+        {
+          value: "1",
+          label: "Reusable showcase",
+          detail: "Shared project grid component for compact and expanded cards",
+        },
+        {
+          value: "100%",
+          label: "Responsive target",
+          detail: "Desktop and mobile layouts designed from the same component set",
+        },
+      ],
+      pipelineTitle: "Site architecture",
+      pipeline: [
+        "Define project content",
+        "Render typed cards",
+        "Expand case studies",
+        "Handle contact flow",
+        "Check API health",
+        "Prepare deployment",
+      ],
+      samples: [],
+      chartsTitle: "Implementation focus",
+      charts: [],
+      reflectionTitle: "Why it matters",
+      reflection:
+        "The site gives me a controlled place to turn project work into readable case studies and interactive demos. The next improvements are moving project content into a content layer, adding richer media for each card, and connecting the deployment path to my home lab.",
+    },
+  },
 ];
 
 export default function ProjectsPage() {
