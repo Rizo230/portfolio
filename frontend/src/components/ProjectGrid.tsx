@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export type Project = {
   title: string;
@@ -30,9 +30,17 @@ export type Project = {
   };
 };
 
+function projectCardId(title: string) {
+  return `project-${title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")}`;
+}
+
 export default function ProjectGrid({ projects }: { projects: Project[] }) {
   const [expandedProject, setExpandedProject] = useState<string | null>(null);
   const scrollPosition = useRef<number | null>(null);
+  const pendingCardScroll = useRef<string | null>(null);
   const orderedProjects = expandedProject
     ? [
         ...projects.filter((project) => project.title === expandedProject),
@@ -41,29 +49,60 @@ export default function ProjectGrid({ projects }: { projects: Project[] }) {
     : projects;
 
   useLayoutEffect(() => {
-    if (scrollPosition.current === null) return;
+    if (scrollPosition.current !== null) {
+      window.scrollTo({ top: scrollPosition.current, behavior: "instant" });
+      scrollPosition.current = null;
+      return;
+    }
 
-    window.scrollTo({ top: scrollPosition.current, behavior: "instant" });
-    scrollPosition.current = null;
+    if (pendingCardScroll.current === null) return;
+
+    const target = document.getElementById(pendingCardScroll.current);
+    pendingCardScroll.current = null;
+
+    requestAnimationFrame(() => {
+      target?.scrollIntoView({ block: "start" });
+    });
   }, [expandedProject]);
+
+  useEffect(() => {
+    if (!window.location.hash) return;
+
+    const cardId = decodeURIComponent(window.location.hash.slice(1));
+    const linkedProject = projects.find(
+      (project) => projectCardId(project.title) === cardId,
+    );
+    if (!linkedProject) return;
+
+    pendingCardScroll.current = cardId;
+    const frame = requestAnimationFrame(() => {
+      setExpandedProject(linkedProject.title);
+    });
+
+    return () => {
+      cancelAnimationFrame(frame);
+    };
+  }, [projects]);
 
   return (
     <div className="mt-12 grid items-start gap-6 [overflow-anchor:none] md:grid-cols-3">
       {orderedProjects.map((project) => {
         const isExpanded = expandedProject === project.title;
-        const panelId = `project-${project.title
+        const cardId = `project-${project.title
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/(^-|-$)/g, "")}`;
+        const panelId = `${cardId}-details`;
 
         return (
           <article
+            id={cardId}
             key={project.title}
             className={`flex flex-col rounded-2xl border transition-all duration-300 dark:border-white/10 ${
               isExpanded
                 ? "border-accent/50 shadow-lg md:col-span-3"
                 : "border-black/10 hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg"
-            }`}
+            } scroll-mt-24`}
           >
             <button
               type="button"

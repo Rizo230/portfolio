@@ -4,47 +4,36 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navigation = [
-  { label: "About", href: "/about" },
-  { label: "Projects", href: "/projects" },
-  { label: "Contact", href: "/contact" },
+  { label: "Home", href: "/", icon: "home" },
+  { label: "About", href: "/about", icon: "user" },
+  { label: "Projects", href: "/projects", icon: "grid" },
+  { label: "Contact", href: "/contact", icon: "mail" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/10 bg-background/90 backdrop-blur dark:border-white/10">
-      <nav
-        aria-label="Main navigation"
-        className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6"
-      >
-        <Link
-          href="/"
-          aria-current={pathname === "/" ? "page" : undefined}
-          className={`inline-flex h-full items-center border-x px-3 text-lg font-semibold tracking-tight transition-colors hover:bg-foreground/[0.05] focus-visible:outline-2 focus-visible:outline-offset-[-2px] sm:px-5 ${
-            pathname === "/"
-              ? "border-accent/50 bg-accent/5 text-accent"
-              : "border-transparent"
-          }`}
-        >
-          Leo Barnes
-        </Link>
-
-        <ul className="flex h-full items-stretch text-sm font-medium">
+    <header className="fixed inset-x-0 top-5 z-50 flex justify-center px-4 pointer-events-none">
+      <nav aria-label="Main navigation" className="portfolio-nav">
+        <ul className="flex items-center gap-1">
           {navigation.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive =
+              item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
             return (
-              <li key={item.href} className="h-full">
+              <li key={item.href}>
                 <Link
                   href={item.href}
                   aria-current={isActive ? "page" : undefined}
-                  className={`inline-flex h-full items-center border-x px-3 text-foreground/70 transition-colors hover:bg-foreground/[0.05] hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-[-2px] sm:px-5 ${
-                    isActive
-                      ? "border-accent/50 bg-accent/5 text-accent"
-                      : "border-transparent"
-                  }`}
+                  className={`portfolio-nav-link ${isActive ? "is-active" : ""}`}
                 >
+                  {item.icon ? (
+                    <span
+                      aria-hidden="true"
+                      className={`portfolio-nav-icon portfolio-nav-icon-${item.icon}`}
+                    />
+                  ) : null}
                   {item.label}
                 </Link>
               </li>
