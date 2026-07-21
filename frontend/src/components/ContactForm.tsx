@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
@@ -11,8 +11,19 @@ type ContactResponse = {
 
 declare global {
   interface Window {
+    contactTurnstileOnLoad?: () => void;
     turnstile?: {
-      reset: () => void;
+      render: (
+        container: HTMLElement,
+        options: {
+          sitekey: string;
+          theme?: "auto" | "light" | "dark";
+          callback?: (token: string) => void;
+          "expired-callback"?: () => void;
+          "error-callback"?: () => void;
+        },
+      ) => string;
+      reset: (widgetId?: string) => void;
     };
   }
 }
@@ -25,6 +36,49 @@ const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 export default function ContactForm() {
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [statusMessage, setStatusMessage] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [captchaStatus, setCaptchaStatus] = useState("CAPTCHA is loading.");
+  const captchaRef = useRef<HTMLDivElement | null>(null);
+  const turnstileWidgetId = useRef<string | null>(null);
+
+  const renderTurnstile = useCallback(() => {
+    if (
+      !turnstileSiteKey ||
+      !captchaRef.current ||
+      !window.turnstile ||
+      turnstileWidgetId.current
+    ) {
+      return;
+    }
+
+    turnstileWidgetId.current = window.turnstile.render(captchaRef.current, {
+      sitekey: turnstileSiteKey,
+      theme: "dark",
+      callback: (token) => {
+        setTurnstileToken(token);
+        setCaptchaStatus("");
+      },
+      "expired-callback": () => {
+        setTurnstileToken("");
+        setCaptchaStatus("CAPTCHA expired. Please try again.");
+      },
+      "error-callback": () => {
+        setTurnstileToken("");
+        setCaptchaStatus("CAPTCHA could not load. Please refresh and try again.");
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+    window.contactTurnstileOnLoad = renderTurnstile;
+    renderTurnstile();
+
+    return () => {
+      if (window.contactTurnstileOnLoad === renderTurnstile) {
+        window.contactTurnstileOnLoad = undefined;
+      }
+    };
+  }, [renderTurnstile]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -46,7 +100,7 @@ export default function ContactForm() {
           email: formData.get("email"),
           message: formData.get("message"),
           website: formData.get("website"),
-          turnstileToken: formData.get("cf-turnstile-response"),
+          turnstileToken,
         }),
       });
 
@@ -59,7 +113,8 @@ export default function ContactForm() {
       }
 
       form.reset();
-      window.turnstile?.reset();
+      setTurnstileToken("");
+      window.turnstile?.reset(turnstileWidgetId.current ?? undefined);
       setSubmitState("success");
       setStatusMessage("Thanks, your message has been sent.");
     } catch (error) {
@@ -78,15 +133,13 @@ export default function ContactForm() {
     <>
       {turnstileSiteKey && (
         <Script
-          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=contactTurnstileOnLoad"
           strategy="afterInteractive"
+          onReady={renderTurnstile}
         />
       )}
 
-      <form
-        onSubmit={handleSubmit}
-        className="grid gap-5 rounded-2xl border border-black/10 p-6 dark:border-white/10 sm:p-8"
-      >
+      <form onSubmit={handleSubmit} className="portfolio-contact-form">
         <div className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden">
           <label htmlFor="website">Website</label>
           <input
@@ -98,8 +151,8 @@ export default function ContactForm() {
           />
         </div>
 
-        <div className="grid gap-2">
-          <label htmlFor="name" className="text-sm font-semibold">
+        <div className="portfolio-contact-field">
+          <label htmlFor="name">
             Name
           </label>
           <input
@@ -109,12 +162,12 @@ export default function ContactForm() {
             required
             maxLength={120}
             autoComplete="name"
-            className="min-h-11 rounded-lg border border-black/10 bg-transparent px-3 py-2 outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 dark:border-white/10"
+            className="portfolio-contact-input"
           />
         </div>
 
-        <div className="grid gap-2">
-          <label htmlFor="email" className="text-sm font-semibold">
+        <div className="portfolio-contact-field">
+          <label htmlFor="email">
             Email
           </label>
           <input
@@ -124,12 +177,12 @@ export default function ContactForm() {
             required
             maxLength={254}
             autoComplete="email"
-            className="min-h-11 rounded-lg border border-black/10 bg-transparent px-3 py-2 outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 dark:border-white/10"
+            className="portfolio-contact-input"
           />
         </div>
 
-        <div className="grid gap-2">
-          <label htmlFor="message" className="text-sm font-semibold">
+        <div className="portfolio-contact-field">
+          <label htmlFor="message">
             Message
           </label>
           <textarea
@@ -138,33 +191,36 @@ export default function ContactForm() {
             required
             maxLength={4000}
             rows={7}
-            className="resize-y rounded-lg border border-black/10 bg-transparent px-3 py-2 outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/20 dark:border-white/10"
+            className="portfolio-contact-input portfolio-contact-message"
           />
         </div>
 
         {turnstileSiteKey ? (
-          <div
-            className="cf-turnstile min-h-[65px]"
-            data-sitekey={turnstileSiteKey}
-            data-theme="auto"
-          />
+          <div className="portfolio-contact-captcha">
+            <div ref={captchaRef} />
+            {captchaStatus ? (
+              <p className="portfolio-contact-captcha-status">
+                {captchaStatus}
+              </p>
+            ) : null}
+          </div>
         ) : (
-          <p className="text-sm text-red-600">CAPTCHA is not configured.</p>
+          <p className="portfolio-contact-error">CAPTCHA is not configured.</p>
         )}
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="portfolio-contact-actions">
           <button
             type="submit"
-            disabled={isSubmitting || !turnstileSiteKey}
-            className="inline-flex min-h-11 items-center justify-center rounded-lg bg-accent px-5 py-2.5 font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 dark:text-black"
+            disabled={isSubmitting || !turnstileSiteKey || !turnstileToken}
+            className="portfolio-contact-submit"
           >
             {isSubmitting ? "Sending..." : "Send message"}
           </button>
 
           <p
             role="status"
-            className={`min-h-6 text-sm ${
-              submitState === "error" ? "text-red-600" : "text-foreground/70"
+            className={`portfolio-contact-status ${
+              submitState === "error" ? "is-error" : ""
             }`}
           >
             {statusMessage}
