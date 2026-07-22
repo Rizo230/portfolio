@@ -1,0 +1,4 @@
+.env*
+portfolio-api
+*.log
+.DS_Store

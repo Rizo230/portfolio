@@ -30,7 +30,7 @@ declare global {
 
 const apiBaseUrl =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ??
-  "http://localhost:8090";
+  "";
 const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 export default function ContactForm() {

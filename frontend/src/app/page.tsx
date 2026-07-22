@@ -6,6 +6,8 @@ type HealthResponse = {
   status: string;
 };
 
+export const dynamic = "force-dynamic";
+
 const projectLinks = [
   {
     label: "Macadamia Challenge",
@@ -71,8 +73,12 @@ const socialLinks = [
 ];
 
 async function getBackendStatus(): Promise<HealthResponse | null> {
+  const backendUrl =
+    process.env.BACKEND_INTERNAL_URL?.replace(/\/$/, "") ??
+    "http://localhost:8090";
+
   try {
-    const response = await fetch("http://localhost:8090/api/health", {
+    const response = await fetch(`${backendUrl}/api/health`, {
       cache: "no-store",
     });
 
@@ -131,6 +137,8 @@ export default async function Home() {
         </ProfileCardFrame>
 
         <div className="portfolio-hero-content">
+          <p className="portfolio-kicker">Home</p>
+
           <h1 id="home-heading" className="portfolio-display">
             <span>AI</span>
             <span>Robotics</span>

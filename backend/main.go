@@ -124,9 +124,18 @@ func main() {
 	}), cfg.frontendURL))
 
 	addr := ":" + cfg.port
-	log.Printf("Portfolio API running on http://localhost%s", addr)
+	server := &http.Server{
+		Addr:              addr,
+		Handler:           mux,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      10 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
 
-	if err := http.ListenAndServe(addr, mux); err != nil {
+	log.Printf("Portfolio API listening on %s", addr)
+
+	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatal(err)
 	}
 }

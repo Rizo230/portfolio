@@ -1,0 +1,41 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_BASE_URL: "${NEXT_PUBLIC_API_BASE_URL:-}"
+        NEXT_PUBLIC_TURNSTILE_SITE_KEY: "${NEXT_PUBLIC_TURNSTILE_SITE_KEY:-}"
+    container_name: portfolio-frontend
+    restart: unless-stopped
+    environment:
+      BACKEND_INTERNAL_URL: "http://portfolio-backend:8090"
+    networks:
+      - portfolio
+      - proxy
+      - internal
+
+  backend:
+    build:
+      context: ./backend
+    container_name: portfolio-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      PORT: "8090"
+      FRONTEND_ORIGIN: "https://leobarnes.dev"
+      TURNSTILE_REQUIRED: "true"
+    networks:
+      - portfolio
+      - proxy
+      - internal
+
+networks:
+  portfolio:
+
+  internal:
+    internal: true
+
+  proxy:
+    external: true
+    name: proxy
