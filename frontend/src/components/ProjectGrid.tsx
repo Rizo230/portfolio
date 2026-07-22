@@ -126,7 +126,7 @@ export default function ProjectGrid({ projects }: { projects: Project[] }) {
                   isExpanded ? "is-expanded" : ""
                 }`}
               >
-                {"->"}
+                {"→"}
               </span>
             </button>
 

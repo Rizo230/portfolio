@@ -34,7 +34,7 @@ export default function Navbar() {
                       className={`portfolio-nav-icon portfolio-nav-icon-${item.icon}`}
                     />
                   ) : null}
-                  {item.label}
+                  <span className="portfolio-nav-label">{item.label}</span>
                 </Link>
               </li>
             );

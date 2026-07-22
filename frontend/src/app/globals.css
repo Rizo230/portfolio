@@ -144,6 +144,10 @@ body {
   color: #ffffff;
 }
 
+.portfolio-nav-label {
+  line-height: 1;
+}
+
 .portfolio-nav-icon {
   position: relative;
   display: inline-block;
@@ -825,6 +829,12 @@ body {
   font-weight: 900;
   opacity: 0.9;
   white-space: nowrap;
+}
+
+.portfolio-projects-toggle .portfolio-card-arrow {
+  right: 32px;
+  bottom: 31px;
+  line-height: 1;
 }
 
 .portfolio-projects-skills {
@@ -1782,17 +1792,17 @@ body {
 
 @media (max-width: 700px) {
   .portfolio-nav-link {
-    min-width: 40px;
-    padding: 0 11px;
-    font-size: 0;
-  }
-
-  .portfolio-nav-link.is-active {
-    font-size: 0;
+    min-width: auto;
+    min-height: 46px;
+    flex-direction: column;
+    gap: 4px;
+    padding: 5px 9px;
+    font-size: 0.68rem;
   }
 
   .portfolio-nav-icon {
-    margin: 0;
+    width: 13px;
+    height: 13px;
   }
 
   .portfolio-home {
@@ -1830,18 +1840,18 @@ body {
   .portfolio-projects-toggle {
     min-height: 245px;
     gap: 14px;
-    padding: 24px 76px 24px 24px;
+    padding: 24px 24px 72px;
   }
 
   .portfolio-projects-title {
-    max-width: calc(100vw - 96px);
+    max-width: 100%;
     font-size: clamp(1.08rem, 5.2vw, 1.26rem);
     line-height: 1;
     overflow-wrap: anywhere;
   }
 
   .portfolio-projects-description {
-    max-width: calc(100vw - 96px);
+    max-width: 100%;
     font-size: 0.96rem;
   }
 
@@ -1850,6 +1860,11 @@ body {
     bottom: 26px;
     width: auto;
     justify-content: flex-end;
+  }
+
+  .portfolio-projects-toggle .portfolio-card-arrow {
+    right: 24px;
+    bottom: 26px;
   }
 
   .portfolio-projects-skills {
@@ -2062,5 +2077,17 @@ body {
 
   .portfolio-contact-method {
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 360px) {
+  .portfolio-nav-link {
+    min-height: 44px;
+    padding: 5px 8px;
+    font-size: 0.74rem;
+  }
+
+  .portfolio-nav-icon {
+    display: none;
   }
 }
