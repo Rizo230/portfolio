@@ -38,6 +38,7 @@ type config struct {
 	contactTo         string
 	turnstileSecret   string
 	turnstileRequired bool
+	trustedProxies    []netip.Prefix
 }
 
 type contactRequest struct {
@@ -118,7 +119,7 @@ func main() {
 		writeJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 	})
 
-	mux.Handle("POST /api/contact", withCORS(contactHandler(sender, verifier, limiter, cfg.turnstileRequired), cfg.frontendURL))
+	mux.Handle("POST /api/contact", withCORS(contactHandler(sender, verifier, limiter, cfg.turnstileRequired, cfg.trustedProxies), cfg.frontendURL))
 	mux.Handle("OPTIONS /api/contact", withCORS(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNoContent)
 	}), cfg.frontendURL))
@@ -149,10 +150,11 @@ func loadConfig() config {
 		contactTo:         envOrDefault("CONTACT_TO_EMAIL", "leobenjaminbarnes@gmail.com"),
 		turnstileSecret:   strings.TrimSpace(os.Getenv("TURNSTILE_SECRET_KEY")),
 		turnstileRequired: envBoolOrDefault("TURNSTILE_REQUIRED", true),
+		trustedProxies:    trustedProxyCIDRsFromEnv("TRUSTED_PROXY_CIDRS"),
 	}
 }
 
-func contactHandler(sender emailSender, verifier challengeVerifier, limiter *rateLimiter, requireChallenge bool) http.Handler {
+func contactHandler(sender emailSender, verifier challengeVerifier, limiter *rateLimiter, requireChallenge bool, trustedProxies []netip.Prefix) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if sender == nil {
 			writeJSON(w, http.StatusServiceUnavailable, contactResponse{
@@ -195,7 +197,7 @@ func contactHandler(sender emailSender, verifier challengeVerifier, limiter *rat
 			return
 		}
 
-		clientIP := clientIPFromRequest(r)
+		clientIP := clientIPFromRequest(r, trustedProxies)
 		if !limiter.Allow(clientIP) {
 			writeJSON(w, http.StatusTooManyRequests, contactResponse{
 				Message: "Too many messages from this network. Please try again later.",
@@ -390,7 +392,12 @@ func (l *rateLimiter) Allow(key string) bool {
 	return true
 }
 
-func clientIPFromRequest(r *http.Request) string {
+func clientIPFromRequest(r *http.Request, trustedProxies []netip.Prefix) string {
+	remoteIP := remoteIPFromRequest(r)
+	if !isTrustedProxy(remoteIP, trustedProxies) {
+		return remoteIP
+	}
+
 	for _, header := range []string{"CF-Connecting-IP", "X-Real-IP", "X-Forwarded-For"} {
 		value := strings.TrimSpace(r.Header.Get(header))
 		if value == "" {
@@ -407,6 +414,10 @@ func clientIPFromRequest(r *http.Request) string {
 		}
 	}
 
+	return remoteIP
+}
+
+func remoteIPFromRequest(r *http.Request) string {
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		host = r.RemoteAddr
@@ -417,6 +428,50 @@ func clientIPFromRequest(r *http.Request) string {
 	}
 
 	return host
+}
+
+func isTrustedProxy(ip string, trustedProxies []netip.Prefix) bool {
+	addr, err := netip.ParseAddr(ip)
+	if err != nil {
+		return false
+	}
+
+	for _, prefix := range trustedProxies {
+		if prefix.Contains(addr) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func trustedProxyCIDRsFromEnv(key string) []netip.Prefix {
+	value := strings.TrimSpace(os.Getenv(key))
+	if value == "" {
+		return nil
+	}
+
+	parts := strings.FieldsFunc(value, func(r rune) bool {
+		return r == ',' || r == ';' || r == ' ' || r == '\n' || r == '\t'
+	})
+
+	trustedProxies := make([]netip.Prefix, 0, len(parts))
+	for _, part := range parts {
+		part = strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+
+		prefix, err := netip.ParsePrefix(part)
+		if err != nil {
+			log.Printf("Ignoring invalid %s entry %q: %v", key, part, err)
+			continue
+		}
+
+		trustedProxies = append(trustedProxies, prefix)
+	}
+
+	return trustedProxies
 }
 
 func withCORS(next http.Handler, allowedOrigin string) http.Handler {

@@ -25,6 +25,7 @@ services:
       PORT: "8090"
       FRONTEND_ORIGIN: "https://leobarnes.dev"
       TURNSTILE_REQUIRED: "true"
+      TRUSTED_PROXY_CIDRS: "172.16.0.0/12,192.168.107.0/24,198.18.0.0/15"
     networks:
       - portfolio
       - proxy

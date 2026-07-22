@@ -7,6 +7,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"net/netip"
 	"testing"
 	"time"
 )
@@ -61,7 +62,7 @@ func TestContactHandlerSendsEmail(t *testing.T) {
 	request := httptest.NewRequest(http.MethodPost, "/api/contact", body)
 	response := httptest.NewRecorder()
 
-	contactHandler(sender, fakeChallengeVerifier{}, newRateLimiter(rateLimitMax, rateLimitWindow), true).ServeHTTP(response, request)
+	contactHandler(sender, fakeChallengeVerifier{}, newRateLimiter(rateLimitMax, rateLimitWindow), true, nil).ServeHTTP(response, request)
 
 	if response.Code != http.StatusAccepted {
 		t.Fatalf("expected status %d, got %d", http.StatusAccepted, response.Code)
@@ -86,7 +87,7 @@ func TestContactHandlerRejectsMissingSender(t *testing.T) {
 	request := httptest.NewRequest(http.MethodPost, "/api/contact", body)
 	response := httptest.NewRecorder()
 
-	contactHandler(nil, fakeChallengeVerifier{}, newRateLimiter(rateLimitMax, rateLimitWindow), true).ServeHTTP(response, request)
+	contactHandler(nil, fakeChallengeVerifier{}, newRateLimiter(rateLimitMax, rateLimitWindow), true, nil).ServeHTTP(response, request)
 
 	if response.Code != http.StatusServiceUnavailable {
 		t.Fatalf("expected status %d, got %d", http.StatusServiceUnavailable, response.Code)
@@ -99,7 +100,7 @@ func TestContactHandlerReportsSendFailure(t *testing.T) {
 	request := httptest.NewRequest(http.MethodPost, "/api/contact", body)
 	response := httptest.NewRecorder()
 
-	contactHandler(sender, fakeChallengeVerifier{}, newRateLimiter(rateLimitMax, rateLimitWindow), true).ServeHTTP(response, request)
+	contactHandler(sender, fakeChallengeVerifier{}, newRateLimiter(rateLimitMax, rateLimitWindow), true, nil).ServeHTTP(response, request)
 
 	if response.Code != http.StatusBadGateway {
 		t.Fatalf("expected status %d, got %d", http.StatusBadGateway, response.Code)
@@ -112,7 +113,7 @@ func TestContactHandlerSuppressesHoneypotSubmissions(t *testing.T) {
 	request := httptest.NewRequest(http.MethodPost, "/api/contact", body)
 	response := httptest.NewRecorder()
 
-	contactHandler(sender, fakeChallengeVerifier{}, newRateLimiter(rateLimitMax, rateLimitWindow), true).ServeHTTP(response, request)
+	contactHandler(sender, fakeChallengeVerifier{}, newRateLimiter(rateLimitMax, rateLimitWindow), true, nil).ServeHTTP(response, request)
 
 	if response.Code != http.StatusAccepted {
 		t.Fatalf("expected status %d, got %d", http.StatusAccepted, response.Code)
@@ -133,7 +134,7 @@ func TestContactHandlerRateLimitsByIP(t *testing.T) {
 		request.RemoteAddr = "203.0.113.10:1234"
 		response := httptest.NewRecorder()
 
-		contactHandler(sender, fakeChallengeVerifier{}, limiter, true).ServeHTTP(response, request)
+		contactHandler(sender, fakeChallengeVerifier{}, limiter, true, nil).ServeHTTP(response, request)
 
 		if i == 0 && response.Code != http.StatusAccepted {
 			t.Fatalf("expected first request status %d, got %d", http.StatusAccepted, response.Code)
@@ -151,7 +152,7 @@ func TestContactHandlerRejectsFailedChallenge(t *testing.T) {
 	request := httptest.NewRequest(http.MethodPost, "/api/contact", body)
 	response := httptest.NewRecorder()
 
-	contactHandler(sender, fakeChallengeVerifier{err: errors.New("bad token")}, newRateLimiter(rateLimitMax, rateLimitWindow), true).ServeHTTP(response, request)
+	contactHandler(sender, fakeChallengeVerifier{err: errors.New("bad token")}, newRateLimiter(rateLimitMax, rateLimitWindow), true, nil).ServeHTTP(response, request)
 
 	if response.Code != http.StatusBadRequest {
 		t.Fatalf("expected status %d, got %d", http.StatusBadRequest, response.Code)
@@ -159,5 +160,31 @@ func TestContactHandlerRejectsFailedChallenge(t *testing.T) {
 
 	if sender.count != 0 {
 		t.Fatalf("expected failed challenge not to send email, sent %d emails", sender.count)
+	}
+}
+
+func TestClientIPIgnoresForwardedHeadersFromUntrustedClients(t *testing.T) {
+	request := httptest.NewRequest(http.MethodPost, "/api/contact", nil)
+	request.RemoteAddr = "203.0.113.10:1234"
+	request.Header.Set("X-Forwarded-For", "198.51.100.20")
+	request.Header.Set("CF-Connecting-IP", "198.51.100.30")
+
+	clientIP := clientIPFromRequest(request, nil)
+
+	if clientIP != "203.0.113.10" {
+		t.Fatalf("expected remote address, got %q", clientIP)
+	}
+}
+
+func TestClientIPUsesForwardedHeadersFromTrustedProxy(t *testing.T) {
+	request := httptest.NewRequest(http.MethodPost, "/api/contact", nil)
+	request.RemoteAddr = "172.18.0.4:1234"
+	request.Header.Set("X-Forwarded-For", "198.51.100.20, 172.18.0.4")
+
+	trustedProxy := netip.MustParsePrefix("172.16.0.0/12")
+	clientIP := clientIPFromRequest(request, []netip.Prefix{trustedProxy})
+
+	if clientIP != "198.51.100.20" {
+		t.Fatalf("expected forwarded client IP, got %q", clientIP)
 	}
 }
