@@ -18,12 +18,25 @@ export default function ProfileCardFrame({
 
   useLayoutEffect(() => {
     const previousPath = sessionStorage.getItem("portfolio:currentPath");
+    const currentPath = window.location.pathname;
 
-    if (previousPath === null || profileRoutes.has(previousPath)) {
+    if (previousPath === null || previousPath === currentPath) {
       return;
     }
 
-    cardRef.current?.classList.add("is-route-entering");
+    cardRef.current?.classList.add("is-card-transitioning");
+
+    if (previousPath === "/" && currentPath === "/about") {
+      cardRef.current?.classList.add("is-home-to-about");
+    }
+
+    if (previousPath === "/about" && currentPath === "/") {
+      cardRef.current?.classList.add("is-about-to-home");
+    }
+
+    if (!profileRoutes.has(previousPath)) {
+      cardRef.current?.classList.add("is-route-entering");
+    }
   }, []);
 
   return (

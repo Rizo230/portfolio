@@ -17,6 +17,10 @@
   --teal: #0c8f83;
   --green: #91b72b;
   --rust: #ad4f2c;
+  --profile-card-home-top: 145px;
+  --profile-card-about-top: 96px;
+  --profile-card-home-height: 490px;
+  --profile-card-about-height: 704px;
   --font-portfolio-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-portfolio-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
@@ -95,11 +99,41 @@ body {
   .portfolio-contact-shell,
   .portfolio-profile-card.is-route-entering,
   .portfolio-about-card.is-route-entering,
+  .portfolio-about-card.is-home-to-about,
+  .portfolio-profile-card.is-about-to-home,
+  .portfolio-profile-card.is-card-transitioning .portfolio-social-list,
+  .portfolio-about-card.is-card-transitioning .portfolio-about-skills,
+  .portfolio-profile-card.is-card-transitioning .portfolio-social-list li,
+  .portfolio-about-card.is-card-transitioning .portfolio-about-skills div,
   .portfolio-profile-copy,
   .portfolio-social-list,
   .portfolio-about-card-copy,
-  .portfolio-about-card-stats {
+  .portfolio-about-skills {
     animation: none !important;
+  }
+}
+
+@keyframes portfolio-card-stretch-to-about {
+  from {
+    top: var(--profile-card-home-top);
+    height: var(--profile-card-home-height);
+  }
+
+  to {
+    top: var(--profile-card-about-top);
+    height: var(--profile-card-about-height);
+  }
+}
+
+@keyframes portfolio-card-contract-to-home {
+  from {
+    top: var(--profile-card-about-top);
+    height: var(--profile-card-about-height);
+  }
+
+  to {
+    top: var(--profile-card-home-top);
+    height: var(--profile-card-home-height);
   }
 }
 
@@ -232,10 +266,11 @@ body {
 
 .portfolio-profile-card {
   position: fixed;
-  top: 145px;
+  top: var(--profile-card-home-top);
   left: max(24px, calc((100vw - 1140px) / 2));
   display: flex;
   width: min(360px, calc(100vw - 48px));
+  height: var(--profile-card-home-height);
   flex-direction: column;
   min-width: 0;
   min-height: 0;
@@ -251,6 +286,59 @@ body {
 .portfolio-about-card.is-route-entering {
   transform-origin: top left;
   animation: portfolio-profile-card-enter 340ms ease both;
+}
+
+.portfolio-profile-card.is-card-transitioning .portfolio-social-list,
+.portfolio-about-card.is-card-transitioning .portfolio-about-skills {
+  animation: portfolio-card-content-enter 300ms ease both;
+}
+
+.portfolio-profile-card.is-card-transitioning .portfolio-social-list,
+.portfolio-about-card.is-card-transitioning .portfolio-about-skills {
+  animation-delay: 120ms;
+}
+
+.portfolio-profile-card.is-card-transitioning .portfolio-social-list li,
+.portfolio-about-card.is-card-transitioning .portfolio-about-skills div {
+  animation: portfolio-card-content-enter 260ms ease both;
+}
+
+.portfolio-profile-card.is-card-transitioning .portfolio-social-list li:nth-child(1),
+.portfolio-about-card.is-card-transitioning .portfolio-about-skills div:nth-child(1) {
+  animation-delay: 150ms;
+}
+
+.portfolio-profile-card.is-card-transitioning .portfolio-social-list li:nth-child(2),
+.portfolio-about-card.is-card-transitioning .portfolio-about-skills div:nth-child(2) {
+  animation-delay: 175ms;
+}
+
+.portfolio-about-card.is-card-transitioning .portfolio-about-skills div:nth-child(3) {
+  animation-delay: 200ms;
+}
+
+.portfolio-about-card.is-card-transitioning .portfolio-about-skills div:nth-child(4) {
+  animation-delay: 225ms;
+}
+
+.portfolio-about-card.is-card-transitioning .portfolio-about-skills div:nth-child(5) {
+  animation-delay: 250ms;
+}
+
+.portfolio-about-card.is-card-transitioning .portfolio-about-skills div:nth-child(6) {
+  animation-delay: 275ms;
+}
+
+.portfolio-about-card.is-card-transitioning .portfolio-about-skills div:nth-child(7) {
+  animation-delay: 300ms;
+}
+
+.portfolio-about-card.is-home-to-about {
+  animation: portfolio-card-stretch-to-about 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.portfolio-profile-card.is-about-to-home {
+  animation: portfolio-card-contract-to-home 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .portfolio-profile-art {
@@ -304,7 +392,6 @@ body {
   font-size: 1.08rem;
   font-weight: 800;
   line-height: 1.15;
-  animation: portfolio-card-content-enter 260ms ease both;
 }
 
 .portfolio-social-list {
@@ -509,20 +596,43 @@ body {
   position: absolute;
   right: 22px;
   bottom: 22px;
-  display: grid;
+  display: block;
   width: 34px;
   height: 34px;
-  place-items: center;
   border: 1px solid currentColor;
   border-radius: 9px;
   color: currentColor;
-  font-size: 0.95rem;
+  font-size: 0;
   font-weight: 900;
   opacity: 0.62;
   transition:
     background 180ms ease,
     opacity 180ms ease,
     transform 180ms ease;
+}
+
+.portfolio-card-arrow::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 16px;
+  width: 15px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.portfolio-card-arrow::after {
+  content: "";
+  position: absolute;
+  right: 9px;
+  top: 11px;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  border-radius: 1px;
+  transform: rotate(45deg);
 }
 
 .portfolio-project-card a:hover .portfolio-card-arrow,
@@ -1150,9 +1260,10 @@ body {
 
 .portfolio-about-card {
   position: fixed;
-  top: 145px;
+  top: var(--profile-card-about-top);
   left: max(24px, calc((100vw - 1140px) / 2));
   width: min(360px, calc(100vw - 48px));
+  height: var(--profile-card-about-height);
   min-width: 0;
   overflow: hidden;
   border-radius: 28px;
@@ -1176,44 +1287,71 @@ body {
 }
 
 .portfolio-about-card-copy {
-  max-width: 285px;
-  margin: 18px 0 0;
-  color: #5f5b56;
+  display: flex;
+  min-height: 64px;
+  max-width: 265px;
+  align-items: center;
+  justify-content: center;
+  margin: 22px auto 0;
+  color: #6d6b68;
+  text-align: center;
   font-size: 1.08rem;
-  font-weight: 850;
+  font-weight: 800;
   line-height: 1.15;
-  animation: portfolio-card-content-enter 260ms ease both;
 }
 
-.portfolio-about-card-stats {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin: 34px 0 0;
+.portfolio-about-skills {
+  margin: 26px 0 0;
+  border-top: 1px solid rgba(11, 11, 11, 0.1);
+  padding-top: 18px;
   animation: portfolio-card-content-enter 280ms ease 70ms both;
 }
 
-.portfolio-about-card-stats div {
-  min-width: 0;
-  min-height: 118px;
-  border-radius: 12px;
-  background: #171614;
-  padding: 22px 20px;
-  color: var(--foreground);
-}
-
-.portfolio-about-card-stats dt {
-  color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 900;
-}
-
-.portfolio-about-card-stats dd {
-  margin: 18px 0 0;
-  color: var(--foreground);
-  font-size: clamp(1.3rem, 2vw, 1.5rem);
+.portfolio-about-skills h3 {
+  margin: 0 0 12px;
+  color: #0b0b0b;
+  font-size: 0.88rem;
   font-weight: 950;
-  line-height: 0.98;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.portfolio-about-skills dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+}
+
+.portfolio-about-skills div {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  border: 1px solid rgba(11, 11, 11, 0.1);
+  border-radius: 999px;
+  background: rgba(11, 11, 11, 0.045);
+  padding: 8px 10px;
+  color: #0b0b0b;
+}
+
+.portfolio-about-skills dt,
+.portfolio-about-skills dd {
+  margin: 0;
+  line-height: 1;
+}
+
+.portfolio-about-skills dt {
+  color: #0b0b0b;
+  font-size: 0.78rem;
+  font-weight: 950;
+}
+
+.portfolio-about-skills dd {
+  color: #7a756d;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: lowercase;
 }
 
 .portfolio-about-content {
@@ -1267,6 +1405,27 @@ body {
   line-height: 1.38;
 }
 
+.portfolio-about-projects-card {
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-dark);
+  padding: 20px;
+}
+
+.portfolio-about-projects-card .portfolio-kicker {
+  margin-bottom: 10px;
+}
+
+.portfolio-about-projects-card h2 {
+  margin: 0 0 18px;
+  color: var(--foreground);
+  font-size: 1.35rem;
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
 .portfolio-about-interests {
   display: grid;
   gap: 12px;
@@ -1280,27 +1439,90 @@ body {
 .portfolio-about-interests li {
   display: flex;
   min-width: 0;
-  min-height: 70px;
+  min-height: 82px;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.035);
-  padding: 0 20px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-dark);
+  padding: 16px 20px;
+  color: var(--foreground);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
+}
+
+.portfolio-about-interests li.portfolio-about-project-portfolio {
+  border-color: #74b2cf;
+  background: #2f6f8f;
+  color: #f4fbff;
+}
+
+.portfolio-about-interests li.portfolio-about-project-homelab {
+  border-color: rgba(255, 106, 0, 0.58);
+  background: #191816;
   color: var(--foreground);
 }
 
 .portfolio-about-interests span {
+  display: flex;
   min-width: 0;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
   font-size: 1rem;
   font-weight: 900;
   line-height: 1.15;
 }
 
+.portfolio-about-interests small {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, currentColor 32%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  padding: 5px 8px;
+  color: currentColor;
+  font-size: 0.68rem;
+  font-weight: 950;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.portfolio-about-project-view {
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 9px 12px;
+  color: inherit;
+  font-size: 0.78rem;
+  font-weight: 950;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.portfolio-about-project-view:hover,
+.portfolio-about-project-view:focus-visible {
+  border-color: rgba(255, 255, 255, 0.74);
+  background: rgba(255, 255, 255, 0.18);
+  color: inherit;
+}
+
+.portfolio-about-project-view:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.28);
+  outline-offset: 3px;
+}
+
 .portfolio-about-interests strong {
   flex-shrink: 0;
-  color: var(--accent);
+  color: currentColor;
   font-size: 1.18rem;
   font-weight: 950;
   line-height: 1;
@@ -1644,6 +1866,7 @@ body {
     left: auto;
     display: grid;
     width: 100%;
+    height: auto;
     min-height: auto;
     grid-template-columns: 150px 1fr;
     gap: 24px;
@@ -1704,6 +1927,9 @@ body {
     left: auto;
     display: grid;
     width: 100%;
+    height: auto;
+    max-height: none;
+    overflow: hidden;
     grid-template-columns: 150px minmax(0, 1fr);
     gap: 24px;
     align-items: center;
@@ -1721,13 +1947,16 @@ body {
   }
 
   .portfolio-about-card-copy {
-    max-width: 520px;
+    grid-column: 2;
+    min-height: 0;
+    max-width: none;
     margin: 0;
+    justify-content: flex-start;
+    text-align: left;
   }
 
-  .portfolio-about-card-stats {
+  .portfolio-about-skills {
     grid-column: 2;
-    max-width: 350px;
     margin: 0;
   }
 
@@ -1891,6 +2120,7 @@ body {
 
   .portfolio-profile-card {
     width: calc(100vw - 32px);
+    height: auto;
     max-width: 100%;
     grid-template-columns: 1fr;
     justify-self: center;
@@ -1968,6 +2198,7 @@ body {
 
   .portfolio-about-card {
     width: calc(100vw - 32px);
+    height: auto;
     max-width: 100%;
     grid-template-columns: 1fr;
     justify-self: center;
@@ -1985,21 +2216,22 @@ body {
   }
 
   .portfolio-about-card-copy {
-    max-width: 285px;
+    grid-column: auto;
+    min-height: 88px;
+    max-width: 280px;
+    margin-top: 12px;
     margin-right: auto;
     margin-left: auto;
     text-align: center;
   }
 
-  .portfolio-about-card-stats {
+  .portfolio-about-skills {
     grid-column: auto;
     max-width: none;
-    gap: 12px;
   }
 
-  .portfolio-about-card-stats div {
-    min-height: 108px;
-    padding: 18px 16px;
+  .portfolio-about-skills dl {
+    justify-content: center;
   }
 
   .portfolio-about-display {
@@ -2023,6 +2255,14 @@ body {
 
   .portfolio-about-statement p {
     font-size: 1.04rem;
+  }
+
+  .portfolio-about-projects-card {
+    padding: 18px;
+  }
+
+  .portfolio-about-projects-card h2 {
+    font-size: 1.2rem;
   }
 
   .portfolio-about-interests li {

@@ -44,21 +44,6 @@ const pageLinks = [
   },
 ];
 
-const stats = [
-  {
-    value: "2016",
-    label: "Programming Since",
-  },
-  {
-    value: "AI",
-    label: "Focus",
-  },
-  {
-    value: "RMIT",
-    label: "Computer science final year",
-  },
-];
-
 const socialLinks = [
   {
     label: "LinkedIn",
@@ -87,8 +72,7 @@ async function getBackendStatus(): Promise<HealthResponse | null> {
     }
 
     return response.json();
-  } catch (error) {
-    console.error("Backend health check failed:", error);
+  } catch {
     return null;
   }
 }
@@ -149,15 +133,6 @@ export default async function Home() {
             Software, AI, robotics, and infrastructure projects.
           </p>
 
-          <dl className="portfolio-stats">
-            {stats.map((item) => (
-              <div key={item.label}>
-                <dt>{item.value}</dt>
-                <dd>{item.label}</dd>
-              </div>
-            ))}
-          </dl>
-
           <ul className="portfolio-project-grid">
             {projectLinks.map((item, index) => (
               <li
@@ -169,9 +144,7 @@ export default async function Home() {
                 <a href={item.href}>
                   <span>{item.label}</span>
                   <strong>{item.value}</strong>
-                  <span aria-hidden="true" className="portfolio-card-arrow">
-                    {"->"}
-                  </span>
+                  <span aria-hidden="true" className="portfolio-card-arrow" />
                 </a>
               </li>
             ))}
