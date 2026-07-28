@@ -333,12 +333,14 @@ body {
   animation-delay: 300ms;
 }
 
-.portfolio-about-card.is-home-to-about {
-  animation: portfolio-card-stretch-to-about 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
+@media (min-width: 981px) {
+  .portfolio-about-card.is-home-to-about {
+    animation: portfolio-card-stretch-to-about 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
 
-.portfolio-profile-card.is-about-to-home {
-  animation: portfolio-card-contract-to-home 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  .portfolio-profile-card.is-about-to-home {
+    animation: portfolio-card-contract-to-home 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
 }
 
 .portfolio-profile-art {
