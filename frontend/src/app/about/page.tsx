@@ -53,12 +53,49 @@ const profileSkills = [
   },
 ];
 
+const aboutNotebookRows = [
+  {
+    title: "Origin story",
+    summary: "Scratch, RMIT CS, why programming stuck",
+    details: [
+      "On a cold rainy day in 2016, my year 6 class was stuck inside for lunch. My teacher took this opportunity to introduce the class to Scratch, an online game development platform, and I was hooked for life. From then on, I took every class I could on computers and software and built projects in my spare time. When trying to figure out what I wanted to do with my life, I realized that programming and computer science were passions that had always been with me, leading me to pursue a degree in Computer Science at RMIT.",
+      "When I started at RMIT, I really had no idea what I wanted to do. Everything was new and overwhelming, and I barely had a clue what options where even available to me. I tried to take a diverse range of courses that sparked my interest, from AI and robotics to web development and network analytics. Over time, I gradually discovered my main interests in AI and robotics, which helped me focus my studies and projects and made me become the developer i am today.",
+    ],
+  },
+  {
+    title: "Working style",
+    summary: "How you turn messy real-world systems into software",
+    details: [
+      "Describe how you approach ambiguous problems: breaking systems into pieces, testing assumptions, and learning from real constraints in robotics, AI, or infrastructure work.",
+      "Add another paragraph here when you are ready.",
+    ],
+  },
+  {
+    title: "What I want next",
+    summary: "Graduate roles, AI, robotics, consulting, systems",
+    details: [
+      "I graduate at the end of 2023, which means its finally time to start actively persuing graduate roles and oppertunities. I am actively looking for positions and roles that align with my skills and interests in AI and robotics. I am particularly interested in roles that allow me to work on cutting edge technologies, and contribute to the development of new and innovative systems. I am also open to systems engineering roles that allow me to apply my skills in a practical setting.",
+    ],
+  },
+  {
+    title: "Outside the terminal",
+    summary: "Personal details and conversation starters",
+    details: [
+      "Add a few human details that feel natural for you: interests, habits, favourite problems to talk about, or what you are learning next.",
+      "Add another paragraph here when you are ready.",
+    ],
+  },
+];
+
 export default function AboutPage() {
   return (
     <main className="portfolio-about flex-1">
       <div className="portfolio-home-glow" aria-hidden="true" />
 
-      <section className="portfolio-about-shell" aria-labelledby="about-heading">
+      <section
+        className="portfolio-about-shell"
+        aria-labelledby="about-heading"
+      >
         <ProfileCardFrame className="portfolio-about-card">
           <div className="portfolio-profile-art portfolio-about-art">
             <span>LB</span>
@@ -71,7 +108,10 @@ export default function AboutPage() {
             things software development.
           </p>
 
-          <section className="portfolio-about-skills" aria-labelledby="about-skills-heading">
+          <section
+            className="portfolio-about-skills"
+            aria-labelledby="about-skills-heading"
+          >
             <h3 id="about-skills-heading">Skills</h3>
             <dl>
               {profileSkills.map((skill) => (
@@ -92,22 +132,33 @@ export default function AboutPage() {
               <span className="portfolio-display-muted">Leo Barnes</span>
             </h1>
             <p className="portfolio-lede">
-              Im a final year Computer Science student at RMIT University. I started programming when I was 12 on Scratch, and I’ve been hooked on all things computers and software since. My current projects span AI development, AI safety, consulting, robotics, and systems engineering.
+              Im a final year Computer Science student at RMIT University. I
+              started programming when I was 12 on Scratch, and I’ve been hooked
+              on all things computers and software since. My current projects
+              span AI development, AI safety, consulting, robotics, and systems
+              engineering.
             </p>
           </div>
 
           <div className="portfolio-about-lower">
             <section className="portfolio-about-statement">
               <p>
-                I like projects where software has to meet the real world:
-                perception, control, infrastructure, and the messy edges between
-                them.
+                As a developer, I found that much of my education taught me
+                about different software and systems, but little about how they
+                interact with and exist in the real world. That gap is what
+                drove me to build hands on projects like my homelab and this
+                site itself.
               </p>
             </section>
 
-            <section className="portfolio-about-projects-card" aria-labelledby="about-projects-heading">
+            <section
+              className="portfolio-about-projects-card"
+              aria-labelledby="about-projects-heading"
+            >
               <p className="portfolio-kicker">Current Projects</p>
-              <h2 id="about-projects-heading">Current Projects under construction</h2>
+              <h2 id="about-projects-heading">
+                Current Projects under construction
+              </h2>
 
               <ol className="portfolio-about-interests">
                 {currentProjects.map((project, index) => (
@@ -128,6 +179,31 @@ export default function AboutPage() {
               </ol>
             </section>
           </div>
+
+          <section
+            className="portfolio-about-notebook"
+            aria-label="Expandable about page draft sections"
+          >
+            <ol className="portfolio-about-notebook-list">
+              {aboutNotebookRows.map((row, index) => (
+                <li key={row.title}>
+                  <details>
+                    <summary>
+                      <strong>{String(index + 1).padStart(2, "0")}</strong>
+                      <span>{row.title}</span>
+                      <p>{row.summary}</p>
+                      <small aria-hidden="true" />
+                    </summary>
+                    <div className="portfolio-about-notebook-detail">
+                      {row.details.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                      ))}
+                    </div>
+                  </details>
+                </li>
+              ))}
+            </ol>
+          </section>
         </div>
       </section>
     </main>

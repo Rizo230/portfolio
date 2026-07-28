@@ -1449,6 +1449,17 @@ body {
   padding: 16px 20px;
   color: var(--foreground);
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.portfolio-about-interests li:hover,
+.portfolio-about-interests li:has(.portfolio-about-project-view:focus-visible) {
+  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.26);
+  transform: translateY(-2px);
 }
 
 .portfolio-about-interests li.portfolio-about-project-portfolio {
@@ -1457,10 +1468,28 @@ body {
   color: #f4fbff;
 }
 
+.portfolio-about-interests li.portfolio-about-project-portfolio:hover,
+.portfolio-about-interests
+  li.portfolio-about-project-portfolio:has(
+    .portfolio-about-project-view:focus-visible
+  ) {
+  border-color: #a4d9ef;
+  background: #367fa2;
+}
+
 .portfolio-about-interests li.portfolio-about-project-homelab {
   border-color: rgba(255, 106, 0, 0.58);
   background: #191816;
   color: var(--foreground);
+}
+
+.portfolio-about-interests li.portfolio-about-project-homelab:hover,
+.portfolio-about-interests
+  li.portfolio-about-project-homelab:has(
+    .portfolio-about-project-view:focus-visible
+  ) {
+  border-color: rgba(255, 106, 0, 0.86);
+  background: #211f1c;
 }
 
 .portfolio-about-interests span {
@@ -1509,7 +1538,8 @@ body {
 }
 
 .portfolio-about-project-view:hover,
-.portfolio-about-project-view:focus-visible {
+.portfolio-about-project-view:focus-visible,
+.portfolio-about-interests li:hover .portfolio-about-project-view {
   border-color: rgba(255, 255, 255, 0.74);
   background: rgba(255, 255, 255, 0.18);
   color: inherit;
@@ -1526,6 +1556,166 @@ body {
   font-size: 1.18rem;
   font-weight: 950;
   line-height: 1;
+}
+
+.portfolio-about-notebook {
+  margin-top: 54px;
+}
+
+.portfolio-about-notebook-list {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.portfolio-about-notebook-list li {
+  min-width: 0;
+}
+
+.portfolio-about-notebook-list details {
+  interpolate-size: allow-keywords;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-dark);
+  color: var(--foreground);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.16);
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.portfolio-about-notebook-list details:hover,
+.portfolio-about-notebook-list details:has(summary:focus-visible) {
+  border-color: rgba(255, 106, 0, 0.46);
+  background: #211f1c;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.22);
+  transform: translateY(-2px);
+}
+
+.portfolio-about-notebook-list summary {
+  display: grid;
+  min-width: 0;
+  min-height: 60px;
+  grid-template-columns: auto minmax(120px, 0.36fr) minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 20px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.portfolio-about-notebook-list summary::-webkit-details-marker {
+  display: none;
+}
+
+.portfolio-about-notebook-list summary:focus-visible {
+  outline: 3px solid rgba(255, 106, 0, 0.36);
+  outline-offset: 3px;
+}
+
+.portfolio-about-notebook-list strong {
+  color: var(--foreground);
+  font-size: 0.95rem;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.portfolio-about-notebook-list span {
+  min-width: 0;
+  color: var(--foreground);
+  font-size: 1.04rem;
+  font-weight: 950;
+  line-height: 1.1;
+}
+
+.portfolio-about-notebook-list p {
+  min-width: 0;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 850;
+  line-height: 1.25;
+}
+
+.portfolio-about-notebook-list small {
+  display: inline-flex;
+  width: 34px;
+  min-width: 34px;
+  min-height: 30px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(238, 238, 234, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 950;
+  line-height: 1;
+  text-transform: uppercase;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.portfolio-about-notebook-list details:hover small,
+.portfolio-about-notebook-list summary:focus-visible small {
+  border-color: rgba(255, 106, 0, 0.42);
+  background: rgba(255, 106, 0, 0.1);
+}
+
+.portfolio-about-notebook-list small::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 180ms ease;
+}
+
+.portfolio-about-notebook-list details[open] small::after {
+  transform: translateY(2px) rotate(225deg);
+}
+
+.portfolio-about-notebook-list details::details-content {
+  block-size: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    block-size 220ms ease,
+    opacity 180ms ease,
+    transform 220ms ease,
+    content-visibility 220ms allow-discrete;
+}
+
+.portfolio-about-notebook-list details[open]::details-content {
+  block-size: auto;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.portfolio-about-notebook-detail {
+  border-top: 1px solid rgba(238, 238, 234, 0.08);
+  padding: 16px 20px 20px 58px;
+}
+
+.portfolio-about-notebook-detail p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 780;
+  line-height: 1.38;
+}
+
+.portfolio-about-notebook-detail p + p {
+  margin-top: 14px;
 }
 
 .portfolio-contact {
@@ -1964,6 +2154,10 @@ body {
     grid-template-columns: 1fr;
   }
 
+  .portfolio-about-notebook-list summary {
+    grid-template-columns: auto minmax(120px, 0.42fr) minmax(0, 1fr) auto;
+  }
+
   .portfolio-about-content {
     grid-column: auto;
   }
@@ -2268,6 +2462,30 @@ body {
   .portfolio-about-interests li {
     min-height: 64px;
     padding: 0 16px;
+  }
+
+  .portfolio-about-notebook {
+    margin-top: 38px;
+  }
+
+  .portfolio-about-notebook-list summary {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px 12px;
+    padding: 16px;
+  }
+
+  .portfolio-about-notebook-list p,
+  .portfolio-about-notebook-list small {
+    grid-column: 2;
+  }
+
+  .portfolio-about-notebook-list small {
+    justify-self: start;
+    margin-top: 2px;
+  }
+
+  .portfolio-about-notebook-detail {
+    padding: 14px 16px 18px 45px;
   }
 
   .portfolio-contact-shell {
