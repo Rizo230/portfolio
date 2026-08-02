@@ -823,81 +823,81 @@ body {
   transform: translateY(-3px);
 }
 
-.portfolio-projects-card-1 {
+.portfolio-projects-card--rust {
   background: var(--rust);
   color: #f8f1ea;
 }
 
-.portfolio-projects-card-2 {
+.portfolio-projects-card--teal {
   background: var(--teal);
   color: #06100f;
 }
 
-.portfolio-projects-card-3 {
+.portfolio-projects-card--dark {
   border-color: var(--border);
   background: #191816;
   color: var(--foreground);
 }
 
-.portfolio-projects-card-4 {
+.portfolio-projects-card--green {
   background: var(--green);
   color: #101504;
 }
 
-.portfolio-projects-card-5 {
+.portfolio-projects-card--blue {
   background: #2f6f8f;
   color: #f4fbff;
 }
 
-.portfolio-projects-card-1.is-expanded,
-.portfolio-projects-card-2.is-expanded,
-.portfolio-projects-card-3.is-expanded,
-.portfolio-projects-card-4.is-expanded,
-.portfolio-projects-card-5.is-expanded {
+.portfolio-projects-card--rust.is-expanded,
+.portfolio-projects-card--teal.is-expanded,
+.portfolio-projects-card--dark.is-expanded,
+.portfolio-projects-card--green.is-expanded,
+.portfolio-projects-card--blue.is-expanded {
   color: var(--foreground);
 }
 
-.portfolio-projects-card-1.is-expanded {
+.portfolio-projects-card--rust.is-expanded {
   border-color: color-mix(in srgb, var(--rust) 76%, #ffffff 10%);
 }
 
-.portfolio-projects-card-2.is-expanded {
+.portfolio-projects-card--teal.is-expanded {
   border-color: color-mix(in srgb, var(--teal) 78%, #ffffff 10%);
 }
 
-.portfolio-projects-card-3.is-expanded {
+.portfolio-projects-card--dark.is-expanded {
   border-color: rgba(255, 106, 0, 0.42);
 }
 
-.portfolio-projects-card-4.is-expanded {
+.portfolio-projects-card--green.is-expanded {
   border-color: color-mix(in srgb, var(--green) 78%, #ffffff 10%);
 }
 
-.portfolio-projects-card-5.is-expanded {
+.portfolio-projects-card--blue.is-expanded {
   border-color: color-mix(in srgb, #2f6f8f 78%, #ffffff 12%);
 }
 
-.portfolio-projects-card-1.is-expanded .portfolio-projects-toggle {
+.portfolio-projects-card--rust.is-expanded .portfolio-projects-toggle {
   background: var(--rust);
   color: #f8f1ea;
 }
 
-.portfolio-projects-card-2.is-expanded .portfolio-projects-toggle {
+.portfolio-projects-card--teal.is-expanded .portfolio-projects-toggle {
   background: var(--teal);
   color: #06100f;
 }
 
-.portfolio-projects-card-3.is-expanded .portfolio-projects-toggle {
+.portfolio-projects-card--dark.is-expanded .portfolio-projects-toggle {
   background: #191816;
   color: var(--foreground);
 }
 
-.portfolio-projects-card-4.is-expanded .portfolio-projects-toggle {
+.portfolio-projects-card--green.is-expanded .portfolio-projects-toggle {
   background: var(--green);
   color: #101504;
 }
 
-.portfolio-projects-card-5.is-expanded .portfolio-projects-toggle {
+.portfolio-projects-card--blue.is-expanded .portfolio-projects-toggle {
   background: #2f6f8f;
   color: #f4fbff;
 }
@@ -1009,23 +1009,23 @@ body {
   padding-top: 24px;
 }
 
-.portfolio-projects-card-1.is-expanded .portfolio-projects-skills {
+.portfolio-projects-card--rust.is-expanded .portfolio-projects-skills {
   border-top-color: color-mix(in srgb, var(--rust) 44%, transparent);
 }
 
-.portfolio-projects-card-2.is-expanded .portfolio-projects-skills {
+.portfolio-projects-card--teal.is-expanded .portfolio-projects-skills {
   border-top-color: color-mix(in srgb, var(--teal) 44%, transparent);
 }
 
-.portfolio-projects-card-3.is-expanded .portfolio-projects-skills {
+.portfolio-projects-card--dark.is-expanded .portfolio-projects-skills {
   border-top-color: var(--border);
 }
 
-.portfolio-projects-card-4.is-expanded .portfolio-projects-skills {
+.portfolio-projects-card--green.is-expanded .portfolio-projects-skills {
   border-top-color: color-mix(in srgb, var(--green) 44%, transparent);
 }
 
-.portfolio-projects-card-5.is-expanded .portfolio-projects-skills {
+.portfolio-projects-card--blue.is-expanded .portfolio-projects-skills {
   border-top-color: color-mix(in srgb, #2f6f8f 44%, transparent);
 }
 
@@ -1556,30 +1556,17 @@ body {
 }
 
 .portfolio-about-project-title {
-  display: flex;
   min-width: 0;
   flex: 1;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
   font-size: 1rem;
   font-weight: 900;
   line-height: 1.15;
 }
 
-.portfolio-about-interests small {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  border: 1px solid color-mix(in srgb, currentColor 32%, transparent);
-  border-radius: 999px;
-  background: color-mix(in srgb, currentColor 12%, transparent);
-  padding: 5px 8px;
-  color: currentColor;
-  font-size: 0.68rem;
-  font-weight: 950;
-  line-height: 1;
-  text-transform: uppercase;
+.portfolio-about-project-title span {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
 
 .portfolio-about-project-link .portfolio-card-arrow {

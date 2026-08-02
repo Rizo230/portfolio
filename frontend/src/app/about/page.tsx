@@ -10,13 +10,11 @@ export const metadata: Metadata = {
 const currentProjects = [
   {
     title: "Portfolio site",
-    tag: "Personal",
     href: "/projects#project-portfolio-website",
     colorClass: "portfolio-about-project-portfolio",
   },
   {
     title: "Homelab",
-    tag: "Personal",
     href: "/projects#project-home-lab",
     colorClass: "portfolio-about-project-homelab",
   },
@@ -168,8 +166,7 @@ export default function AboutPage() {
                       href={project.href}
                     >
                       <span className="portfolio-about-project-title">
-                        {project.title}
-                        <small>{project.tag}</small>
+                        <span>{project.title}</span>
                       </span>
                       <span className="sr-only">View {project.title}</span>
                       <span

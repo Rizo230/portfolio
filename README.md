@@ -111,7 +111,7 @@ when the API is offline and displays the backend status as unavailable.
 - [x] Navigation
 - [ ] Footer
 - [x] Initial responsive design
-- [ ] Docker development environment
+- [x] Docker development environment
 
 ### Portfolio
 
