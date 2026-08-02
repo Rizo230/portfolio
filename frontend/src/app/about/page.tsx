@@ -74,7 +74,7 @@ const aboutNotebookRows = [
     title: "What I want next",
     summary: "Graduate roles, AI, robotics, consulting, systems",
     details: [
-      "I graduate at the end of 2023, which means its finally time to start actively persuing graduate roles and oppertunities. I am actively looking for positions and roles that align with my skills and interests in AI and robotics. I am particularly interested in roles that allow me to work on cutting edge technologies, and contribute to the development of new and innovative systems. I am also open to systems engineering roles that allow me to apply my skills in a practical setting.",
+      "I graduate at the end of 2026, which means its finally time to start actively persuing graduate roles and oppertunities. I am actively looking for positions and roles that align with my skills and interests in AI and robotics. I am particularly interested in roles that allow me to work on cutting edge technologies, and contribute to the development of new and innovative systems. I am also open to systems engineering roles that allow me to apply my skills in a practical setting.",
     ],
   },
   {
@@ -163,17 +163,21 @@ export default function AboutPage() {
               <ol className="portfolio-about-interests">
                 {currentProjects.map((project, index) => (
                   <li key={project.title} className={project.colorClass}>
-                    <span>
-                      {project.title}
-                      <small>{project.tag}</small>
-                    </span>
                     <Link
-                      className="portfolio-about-project-view"
+                      className="portfolio-about-project-link"
                       href={project.href}
                     >
-                      View
+                      <span className="portfolio-about-project-title">
+                        {project.title}
+                        <small>{project.tag}</small>
+                      </span>
+                      <span className="sr-only">View {project.title}</span>
+                      <span
+                        aria-hidden="true"
+                        className="portfolio-card-arrow"
+                      />
+                      <strong>{String(index + 1).padStart(2, "0")}</strong>
                     </Link>
-                    <strong>{String(index + 1).padStart(2, "0")}</strong>
                   </li>
                 ))}
               </ol>

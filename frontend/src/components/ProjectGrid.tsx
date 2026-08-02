@@ -91,6 +91,10 @@ export default function ProjectGrid({ projects }: { projects: Project[] }) {
         const projectIndex = projects.findIndex(
           (item) => item.title === project.title,
         );
+        const toggleProject = () => {
+          pendingCardScroll.current = cardId;
+          setExpandedProject(isExpanded ? null : project.title);
+        };
 
         return (
           <article
@@ -102,10 +106,7 @@ export default function ProjectGrid({ projects }: { projects: Project[] }) {
           >
             <button
               type="button"
-              onClick={() => {
-                pendingCardScroll.current = cardId;
-                setExpandedProject(isExpanded ? null : project.title);
-              }}
+              onClick={toggleProject}
               className="portfolio-projects-toggle"
               aria-expanded={isExpanded}
               aria-controls={panelId}
@@ -132,6 +133,7 @@ export default function ProjectGrid({ projects }: { projects: Project[] }) {
 
             <ul
               className="portfolio-projects-skills"
+              onClick={!isExpanded ? toggleProject : undefined}
               aria-label={`${project.title} skills`}
             >
               {project.skills.map((technology) => (

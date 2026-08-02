@@ -638,7 +638,12 @@ body {
 }
 
 .portfolio-project-card a:hover .portfolio-card-arrow,
-.portfolio-project-card a:focus-visible .portfolio-card-arrow {
+.portfolio-project-card a:focus-visible .portfolio-card-arrow,
+.portfolio-projects-card:not(.is-expanded):hover .portfolio-card-arrow,
+.portfolio-projects-toggle:focus-visible .portfolio-card-arrow,
+.portfolio-about-interests li:hover .portfolio-card-arrow,
+.portfolio-about-project-link:hover .portfolio-card-arrow,
+.portfolio-about-project-link:focus-visible .portfolio-card-arrow {
   background: rgba(255, 255, 255, 0.18);
   opacity: 0.82;
   transform: translate(3px, -3px);
@@ -646,6 +651,17 @@ body {
 
 .portfolio-projects-card.is-expanded .portfolio-card-arrow.is-expanded {
   transform: rotate(90deg);
+}
+
+.portfolio-projects-card.is-expanded
+  .portfolio-projects-toggle:hover
+  .portfolio-card-arrow.is-expanded,
+.portfolio-projects-card.is-expanded
+  .portfolio-projects-toggle:focus-visible
+  .portfolio-card-arrow.is-expanded {
+  background: rgba(255, 255, 255, 0.18);
+  opacity: 0.82;
+  transform: translate(3px, -3px) rotate(90deg);
 }
 
 .portfolio-page-grid {
@@ -782,11 +798,14 @@ body {
   color: var(--foreground);
   transition:
     border-color 220ms ease,
+    filter 180ms ease,
     box-shadow 220ms ease,
     transform 220ms ease;
 }
 
 .portfolio-projects-card:not(.is-expanded):hover {
+  filter: brightness(1.08);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.26);
   transform: translateY(-3px);
 }
 
@@ -796,6 +815,12 @@ body {
   width: 100%;
   background: #171614;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+}
+
+.portfolio-projects-card.is-expanded:has(.portfolio-projects-toggle:hover),
+.portfolio-projects-card.is-expanded:has(.portfolio-projects-toggle:focus-visible) {
+  box-shadow: 0 28px 78px rgba(0, 0, 0, 0.34);
+  transform: translateY(-3px);
 }
 
 .portfolio-projects-card-1 {
@@ -888,6 +913,24 @@ body {
   gap: 14px;
   padding: 32px 86px 32px 32px;
   text-align: left;
+  transition:
+    filter 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.portfolio-projects-card:not(.is-expanded) .portfolio-projects-toggle {
+  flex: 1;
+  height: 100%;
+}
+
+.portfolio-projects-card:not(.is-expanded) .portfolio-projects-skills {
+  cursor: pointer;
+}
+
+.portfolio-projects-card.is-expanded .portfolio-projects-toggle:hover,
+.portfolio-projects-card.is-expanded .portfolio-projects-toggle:focus-visible {
+  filter: brightness(1.08);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.14);
 }
 
 .portfolio-projects-toggle:focus-visible {
@@ -1439,29 +1482,29 @@ body {
 }
 
 .portfolio-about-interests li {
-  display: flex;
+  position: relative;
+  display: block;
   min-width: 0;
   min-height: 82px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
   border: 2px solid var(--border);
   border-radius: 8px;
   background: var(--surface-dark);
-  padding: 16px 20px;
+  padding: 0;
   color: var(--foreground);
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
   transition:
     border-color 180ms ease,
     background 180ms ease,
+    filter 180ms ease,
     box-shadow 180ms ease,
     transform 180ms ease;
 }
 
 .portfolio-about-interests li:hover,
-.portfolio-about-interests li:has(.portfolio-about-project-view:focus-visible) {
-  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.26);
-  transform: translateY(-2px);
+.portfolio-about-interests li:has(.portfolio-about-project-link:focus-visible) {
+  filter: brightness(1.08);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.26);
+  transform: translateY(-3px);
 }
 
 .portfolio-about-interests li.portfolio-about-project-portfolio {
@@ -1473,7 +1516,7 @@ body {
 .portfolio-about-interests li.portfolio-about-project-portfolio:hover,
 .portfolio-about-interests
   li.portfolio-about-project-portfolio:has(
-    .portfolio-about-project-view:focus-visible
+    .portfolio-about-project-link:focus-visible
   ) {
   border-color: #a4d9ef;
   background: #367fa2;
@@ -1488,13 +1531,31 @@ body {
 .portfolio-about-interests li.portfolio-about-project-homelab:hover,
 .portfolio-about-interests
   li.portfolio-about-project-homelab:has(
-    .portfolio-about-project-view:focus-visible
+    .portfolio-about-project-link:focus-visible
   ) {
   border-color: rgba(255, 106, 0, 0.86);
   background: #211f1c;
 }
 
-.portfolio-about-interests span {
+.portfolio-about-project-link {
+  position: relative;
+  display: flex;
+  min-height: 78px;
+  height: 100%;
+  min-width: 0;
+  align-items: center;
+  padding: 16px 112px 16px 20px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.portfolio-about-project-link:focus-visible {
+  border-radius: 8px;
+  outline: 3px solid rgba(255, 255, 255, 0.28);
+  outline-offset: 3px;
+}
+
+.portfolio-about-project-title {
   display: flex;
   min-width: 0;
   flex: 1;
@@ -1521,43 +1582,23 @@ body {
   text-transform: uppercase;
 }
 
-.portfolio-about-project-view {
-  flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.42);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 9px 12px;
-  color: inherit;
-  font-size: 0.78rem;
-  font-weight: 950;
-  line-height: 1;
-  text-decoration: none;
-  text-transform: uppercase;
-  transition:
-    border-color 180ms ease,
-    background 180ms ease,
-    color 180ms ease;
-}
-
-.portfolio-about-project-view:hover,
-.portfolio-about-project-view:focus-visible,
-.portfolio-about-interests li:hover .portfolio-about-project-view {
-  border-color: rgba(255, 255, 255, 0.74);
-  background: rgba(255, 255, 255, 0.18);
-  color: inherit;
-}
-
-.portfolio-about-project-view:focus-visible {
-  outline: 3px solid rgba(255, 255, 255, 0.28);
-  outline-offset: 3px;
+.portfolio-about-project-link .portfolio-card-arrow {
+  right: 20px;
+  top: 50%;
+  bottom: auto;
+  margin-top: -17px;
 }
 
 .portfolio-about-interests strong {
+  position: absolute;
+  right: 68px;
+  top: 50%;
   flex-shrink: 0;
   color: currentColor;
   font-size: 1.18rem;
   font-weight: 950;
   line-height: 1;
+  transform: translateY(-50%);
 }
 
 .portfolio-about-notebook {
@@ -2463,7 +2504,20 @@ body {
 
   .portfolio-about-interests li {
     min-height: 64px;
-    padding: 0 16px;
+    padding: 0;
+  }
+
+  .portfolio-about-project-link {
+    min-height: 60px;
+    padding: 14px 104px 14px 16px;
+  }
+
+  .portfolio-about-project-link .portfolio-card-arrow {
+    right: 16px;
+  }
+
+  .portfolio-about-interests strong {
+    right: 64px;
   }
 
   .portfolio-about-notebook {
