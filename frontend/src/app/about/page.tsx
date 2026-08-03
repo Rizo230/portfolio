@@ -62,11 +62,8 @@ const aboutNotebookRows = [
   },
   {
     title: "Working style",
-    summary: "How you turn messy real-world systems into software",
-    details: [
-      "Describe how you approach ambiguous problems: breaking systems into pieces, testing assumptions, and learning from real constraints in robotics, AI, or infrastructure work.",
-      "Add another paragraph here when you are ready.",
-    ],
+    summary: "How I approach problems and projects",
+    details: [""],
   },
   {
     title: "What I want next",
@@ -77,11 +74,8 @@ const aboutNotebookRows = [
   },
   {
     title: "Outside the terminal",
-    summary: "Personal details and conversation starters",
-    details: [
-      "Add a few human details that feel natural for you: interests, habits, favourite problems to talk about, or what you are learning next.",
-      "Add another paragraph here when you are ready.",
-    ],
+    summary: "",
+    details: [""],
   },
 ];
 
@@ -131,10 +125,9 @@ export default function AboutPage() {
             </h1>
             <p className="portfolio-lede">
               Im a final year Computer Science student at RMIT University. I
-              started programming when I was 12 on Scratch, and I’ve been hooked
-              on all things computers and software since. My current projects
-              span AI development, AI safety, consulting, robotics, and systems
-              engineering.
+              started programming when I was 12, and I’ve been hooked on all
+              things computers and software since. My current interests span AI
+              development and consulting, robotics, and systems engineering.
             </p>
           </div>
 

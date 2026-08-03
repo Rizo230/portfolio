@@ -83,9 +83,9 @@ export default function CellIdentificationProject() {
           <h3>The project</h3>
           <p>
             I built and evaluated convolutional neural networks for two
-            supervised-learning tasks: identifying whether an isolated cell was
-            cancerous and classifying it as one of four cell types. The models
-            were trained on 9,896 labelled 27x27 microscopy images using
+            supervised learning tasks, identifying whether a cell was cancerous,
+            and classifying it as one of four cell types. The models were
+            trained on 9,896 labelled 27x27 microscopy images using
             augmentation, class weighting, and early stopping.
           </p>
         </div>
@@ -160,12 +160,15 @@ export default function CellIdentificationProject() {
         <div className="portfolio-projects-reflection">
           <h3>What I learned</h3>
           <p>
-            The project showed me that model complexity does not automatically
-            improve results. A simplified ReLU model performed best for cancer
-            classification, while PReLU and early stopping produced the strongest
-            balance for cell-type classification. It also reinforced that a
-            medical classifier should be treated as a screening aid, not a
-            standalone diagnostic tool.
+            This project proved to be a great introduction to computer vision
+            and deep learning and its workflow. It demonstrated that a more
+            complex model doesn't automatically mean better results, with a
+            simplified ReLU model performing best for cancer classification,
+            while PReLU and early stopping produced the strongest balance for
+            cell type classification. It also reinforced that these models can
+            never be perfect, and high stakes applications like a medical
+            classifier should be treated as a screening aid, not a standalone
+            diagnostic tool.
           </p>
         </div>
       </div>

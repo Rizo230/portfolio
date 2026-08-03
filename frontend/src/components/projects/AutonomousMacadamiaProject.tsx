@@ -77,14 +77,14 @@ export default function AutonomousMacadamiaProject() {
         it to be, and I thought it was going to be pretty hard. Creating these
         systems involves many complex subsystems, from computer vision,
         localization, path planning, decision making, control and more, all
-        coming together seamlessly, consistently, and in real time for a reliable
-        result.
+        coming together seamlessly, consistently, and in real time for a
+        reliable result.
         {"\n\n"}
         In the words of my professor Dr Timothy Wiley, &quot;The real world
-        sucks!&quot;. When you stack all these complex systems on top of eachother
-        and try to get them running in real life, things inevitably break
-        (sometimes not even the things made by students). This complexity and
-        difficulty is probably why it was also one of my favorite projects,
+        sucks!&quot;. When you stack all these complex systems on top of
+        eachother and try to get them running in real life, things inevitably
+        break (sometimes not even the things made by students). This complexity
+        and difficulty is probably why it was also one of my favorite projects,
         there where so many topics to explore and learn about, and it really
         pushed me as a developer.
       </p>
@@ -93,17 +93,40 @@ export default function AutonomousMacadamiaProject() {
         <div className="portfolio-projects-case-block portfolio-projects-overview">
           <h3>The project</h3>
           <p>
-            I worked on a modular ROS 2 autonomy system built around a
-            three-tier architecture. The deliberative layer was handled by an
-            orchard control state machine, which controlled the high-level
-            mission flow: detect the orchard, choose the next tree, request
-            navigation, trigger tree coverage, mark trees as visited, and return
-            home once the mission was complete. The sequencing layer was split
-            into focused ROS nodes for boundary filtering, tree mapping, tree
-            memory, waypoint planning, OMPL path planning, Nav2 path dispatch,
-            and spiral coverage behaviour. Each node communicated through
-            explicit topics and actions, which made the system easier to test in
-            isolation and easier to integrate into a complete multi-tree mission.
+            An automated macadamia harvesting robot may seem like a niche
+            application, but it is a great example of a real world problem where
+            automation and robotics can make a significant impact. When
+            macadmaia nuts are ready to be harvested they all fall off the trees
+            simultaniusly, and need to be collected within the day to avoid
+            spoiladge. This leaves farms without enough man power to lose tones
+            of crop every season.
+          </p>
+
+          <p>
+            We where tasked with creating an autonomous robot system that could
+            navigate a mock macadamia orchard and simulate collecting nuts. In
+            our research, we realised that any scalable system couldnt just
+            detect and approach individual nuts, and that large scale coverage
+            of the orchard was required. This meant that we needed to create a
+            system that could detect trees, plan approach waypoints, and run a
+            coverage behaviour to simulate nut collection on as much of the
+            orchard as possible, as fast as possible.
+          </p>
+
+          <p>
+            We built on a modular ROS 2 autonomy system, designed around a
+            three-tier architecture. My main contribution was the design and
+            implementation of the deliberative layer, which was handled by an
+            orchard control state machine. This state machine controlled the
+            high-level mission flow: detect the orchard, choose the next tree,
+            request navigation, trigger tree coverage, mark trees as visited,
+            and return home once the mission was complete. The sequencing layer
+            was split into focused ROS nodes for boundary filtering, tree
+            mapping, tree memory, waypoint planning, OMPL path planning, Nav2
+            path dispatch, and spiral coverage behaviour. Each node communicated
+            through explicit topics and actions, which made the system easier to
+            test in isolation and easier to integrate into a complete multi-tree
+            mission.
           </p>
         </div>
 
@@ -156,12 +179,13 @@ export default function AutonomousMacadamiaProject() {
           <h3>Engineering tradeoffs</h3>
           <p>
             The strongest parts of the project were the deterministic mission
-            sequencing and the clear ROS topic boundaries between nodes. The main
-            limitations were drift during round spiral behaviour, limited
-            recovery when a state failed, and unreliable Nav2 execution for local
-            spiral waypoint batches. The next improvements would be explicit
-            retry policies, mission-history logging, and a cleaner split between
-            tree-centre poses and approach-waypoint poses.
+            sequencing and the clear ROS topic boundaries between nodes. The
+            main limitations were drift during round spiral behaviour, limited
+            recovery when a state failed, and unreliable Nav2 execution for
+            local spiral waypoint batches. As this was a university project, we
+            had limited time and resources to test and refine the system into
+            what it could have been. I would have liked to see what this could
+            have become!
           </p>
         </div>
       </div>
